@@ -17,7 +17,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Exactle/marked"
+    "url": "https://git.heroku.com/markedio.git"
   },
   "keywords": [
     "node",
