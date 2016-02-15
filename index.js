@@ -1,4 +1,4 @@
-var cool = require('cool-ascii-faces');
+//var cool = require('cool-ascii-faces');
 var express = require('express');
 var app = express();
 var pg = require('pg');
