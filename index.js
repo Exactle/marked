@@ -12,61 +12,62 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
 function user(firstName) {
-	this.firstName = firstName;
-	this.friends = [];
-	this.addFriend = function (name) {
-		this.friends[this.friends.length] = name;
-	};
+    this.firstName = firstName;
+    this.friends = [];
+    this.addFriend = function (name) {
+        this.friends[this.friends.length] = name;
+    };
 }
 
-app.get('/', function(request, response) {
-  response.render('pages/index');
+app.get('/', function (request, response) {
+    response.render('pages/index');
 });
 
-app.get('/profile\/*', function(request, response) {
-  var cut = request.originalUrl.substring(9);
-  response.render('pages/profile', {user: cut});
-
-app.get('/user', function(request, response) {
-	var krystal = new user("Krystal");
-	krystal.addFriend("Mike");
-	krystal.addFriend("Alex");
-	krystal.addFriend("Shelby");
-	
-	var string = "Created user: ";
-	string = string.concat(krystal.firstName);
-	string = string.concat("<br>");
-	
-	for(i = 0; i < krystal.friends.length; i++){
-		string = string.concat("Added friend: ");
-		string = string.concat(krystal.friends[i]);
-		string = string.concat("<br>");		
-	}
-	
-	var xander = new user("Xander");
-	xander.addFriend("Sterling");
-	xander.addFriend("Caleb");
-	xander.addFriend("Ryan");
-	
-	string = string.concat("<br>Created user: ");
-	string = string.concat(xander.firstName);
-	string = string.concat("<br>");
-	
-	for(i = 0; i < xander.friends.length; i++){
-		string = string.concat("Added friend: ");
-		string = string.concat(xander.friends[i]);
-		string = string.concat("<br>");		
-	}	
-	
-	response.send(string);
+app.get('/profile\/*', function (request, response) {
+    var cut = request.originalUrl.substring(9);
+    response.render('pages/profile', {user: cut})
 });
 
-app.get('/test', function(request, response) {
-	response.send('<a href="/link"> Go to that cool page</a>');
+app.get('/user', function (request, response) {
+    var krystal = new user("Krystal");
+    krystal.addFriend("Mike");
+    krystal.addFriend("Alex");
+    krystal.addFriend("Shelby");
+
+    var string = "Created user: ";
+    string = string.concat(krystal.firstName);
+    string = string.concat("<br>");
+
+    for (i = 0; i < krystal.friends.length; i++) {
+        string = string.concat("Added friend: ");
+        string = string.concat(krystal.friends[i]);
+        string = string.concat("<br>");
+    }
+
+    var xander = new user("Xander");
+    xander.addFriend("Sterling");
+    xander.addFriend("Caleb");
+    xander.addFriend("Ryan");
+
+    string = string.concat("<br>Created user: ");
+    string = string.concat(xander.firstName);
+    string = string.concat("<br>");
+
+    for (i = 0; i < xander.friends.length; i++) {
+        string = string.concat("Added friend: ");
+        string = string.concat(xander.friends[i]);
+        string = string.concat("<br>");
+    }
+
+    response.send(string);
 });
 
-app.get('/link', function(request, response) {
-	response.send('Tada! You went to that page');
+app.get('/test', function (request, response) {
+    response.send('<a href="/link"> Go to that cool page</a>');
+});
+
+app.get('/link', function (request, response) {
+    response.send('Tada! You went to that page');
 });
 
 // app.get('/db', function(request,response) {
@@ -81,14 +82,14 @@ app.get('/link', function(request, response) {
 // 	});
 // });
 
-app.get(/user\/*/, function(request, response) {
-  if(request.originalUrl === "/user/michael")
-  	response.send("u a cool guy");
-  else
-  	response.send("might be cool i dunno tbh");
-  // response.send('/a/');
+app.get(/user\/*/, function (request, response) {
+    if (request.originalUrl === "/user/michael")
+        response.send("u a cool guy");
+    else
+        response.send("might be cool i dunno tbh");
+    // response.send('/a/');
 });
 
-app.listen(app.get('port'), function() {
-  console.log('Node app is running on port', app.get('port'));
+app.listen(app.get('port'), function () {
+    console.log('Node app is running on port', app.get('port'));
 });
