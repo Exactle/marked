@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-//var cool = require('cool-ascii-faces');
-=======
->>>>>>> refs/remotes/origin/DevelopAlexKaran
 var express = require('express');
 var app = express();
 //test comment
