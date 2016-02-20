@@ -11,8 +11,11 @@ app.use(express.static(__dirname + '/public'));
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
+
 function user(firstName) {
     this.firstName = firstName;
+
+
     this.friends = [];
     this.addFriend = function (name) {
         this.friends[this.friends.length] = name;
@@ -88,6 +91,10 @@ app.get(/user\/*/, function (request, response) {
     else
         response.send("might be cool i dunno tbh");
     // response.send('/a/');
+});
+
+app.post(/.*/, function(request, response) {
+	console.log("thing is:" + request.originalUrl);
 });
 
 app.listen(app.get('port'), function () {
