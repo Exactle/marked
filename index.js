@@ -28,6 +28,18 @@ app.set('view engine', 'ejs');
 app.get('/', function(request, response) {
   response.render('pages/index');
 });
+app.get('/', function(request, response) {
+  response.render('pages/login');
+});
+app.get('/', function(request, response) {
+  response.render('pages/profile');
+});
+app.get('/', function(request, response) {
+  response.render('pages/signup');
+});
+app.get('/', function(request, response) {
+  response.render('pages/db');
+});
 
 app.get('/db', function(request,response) {
 	pg.connect(process.env.DATABASE_URL, function(err, client, done) {
