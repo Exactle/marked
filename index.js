@@ -26,8 +26,9 @@ app.get('/', function (request, response) {
     console.log("Cookies: ", request.cookies);
 });
 
-app.get('/profile\/*', function (request, response) {
-    var cut = request.originalUrl.substring(9);
+app.get('/profile\/(*)', function (request, response) {
+    var cut = request.params[0];
+    //request.originalUrl.substring(9);
     response.render('pages/profile', {user: cut})
 });
 
