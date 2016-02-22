@@ -18,8 +18,16 @@ var session = require('express-session');
 mongoose.connect("mongodb://admin:admin@ds011268.mongolab.com:11268/markeddb");
  require('./config/passport')(passport); //pass passport for configuration
 
-
 app.use(express.static(__dirname + '/public'));
+
+//required for passport
+app.use(session({ secret: 'Santiago???' })); // session secret
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+app.use(flash()); //connect-flash for flash messages stored in session
+
+//routes
+require('./app/routes.js')(app,passport);
 
 // views is directory for all template files
 app.set('views', __dirname + '/views');
@@ -40,6 +48,7 @@ app.get('/', function(request, response) {
 app.get('/', function(request, response) {
   response.render('pages/db');
 });
+
 
 app.get('/db', function(request,response) {
 	pg.connect(process.env.DATABASE_URL, function(err, client, done) {
