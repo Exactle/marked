@@ -197,7 +197,7 @@ app.get(/testing\/(.*)/, function(request, response) {
 	response.send(backend.getUser(name).getFriend(friend.name));
 });
 
-app.get(/profile\/(.*)/, function (request, response) {
+app.get(/\/profile\/(.*)/, function (request, response) {
     var name = request.params[0];
 
 
@@ -249,7 +249,7 @@ app.get('/link', function (request, response) {
 // 	});
 // });
 
-app.get(/user\/*/, function (request, response) {
+app.get(/\/user\/*/, function (request, response) {
     if (request.originalUrl === "/user/michael")
         response.send("u a cool guy");
     else
@@ -257,9 +257,11 @@ app.get(/user\/*/, function (request, response) {
     // response.send('/a/');
 });
 
-app.post(/.*/, function (request, response) {
-    console.log("thing is:" + request.originalUrl);
-});
+// app.get(/addmark)
+
+// app.post(/.*/, function (request, response) {
+//     console.log("thing is:" + request.originalUrl);
+// });
 
 app.listen(app.get('port'), function () {
     console.log('Node app is running on port', app.get('port'));
