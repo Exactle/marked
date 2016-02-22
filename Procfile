@@ -1,1 +1,1 @@
-web: node index.js --harmony-modules
+web: node index.js --harmony-modules --harmony
