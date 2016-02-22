@@ -35,20 +35,79 @@ exports.removeUser = function(name) {
 class User{
 	constructor(name){
 		this.name = name;
-		this.friends = new Array();
-		this.marks = new Array();
-		this.tags = new Array();
+		this.friends = new Map();
+		this.groups = new Map();
+		this.marks = new Map();
+		this.tags = new Map();
 	}
 	
-	addFriend(friend){
-		this.friends[this.friends.length] = friend;
+	addFriend(user){
+		this.friends.set(user.name, user);
 	}
+	
+	removeFriend(user){
+		this.friends.delete(user);
+	}
+	
+	getFriend(name){
+		return this.friends.get(name);
+	}	
 	
 	addMark(mark){
-		this.marks[this.marks.length] = mark;
+		this.marks.set(mark, mark);
+	}
+	
+	removeMark(mark){
+		this.marks.delete(mark);
+	}
+	
+	//dunno if getMark is necessary??
+	getMark(mark){
+		return this.marks.get(mark);
 	}
 	
 	addTag(tag) {
-		this.tags[this.tags.length] = tag;
+		this.tags.set(tag, tag);
 	}
+	
+	removeTag(tag) {
+		this.tags.delete(tag);
+	}
+	
+	getTag(tag) {
+		return this.tags.get(tag);
+	}
+
+	addGroup(name){
+		this.groups.set(name, name);
+	}
+	
+	removeGroup(name) {
+		this.groups.delete(name);
+	}
+	
+	getGroup(name){
+		return this.groups.get(name);
+	}
+
+}
+
+class Group{
+	constructor(name){
+		this.name = name;
+		this.members = new Map();
+	}
+	
+	addMember(user){
+		this.members.set(user.name, user);
+	}
+	
+	removeMember(user){
+		this.members.delete(user);
+	}
+	
+	getMember(name){
+		return this.members.get(name);
+	}
+	
 }
