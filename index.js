@@ -13,12 +13,12 @@ var port = process.env.PORT || 5000;
 
 app.use(express.static(__dirname + '/public'));
 
-//middleware
+//Middleware
 app.use(bodyParser());
 app.use(cookieParser('ooh mysterious'));
 app.use(session());
 
-//message middleware
+//Message middleware
 
 app.use(function(req, res, next){ 
     var err = req.session.error 
@@ -84,8 +84,7 @@ app.get('/restricted', restrict, function(req, res){
 })
 
 app.get('/logout', function(req, res){
-    // destroy the user's session to log them out 
-    // will be re-created next request
+    //End user session
     req.session.destroy(function(){ 
         res.redirect('/');
     }); 
@@ -106,12 +105,8 @@ app.post('/login', function(req, res){
     if (user) { 
 
         console.log('authenticate')
-        // Regenerate session when signing in 
-        // to prevent fixation
         req.session.regenerate(function(){
-            // Store the user's primary key 
-            // in the session store to be retrieved,
-            // or in this case the entire user object 
+            // Store username as session user
             req.session.user = user;
             req.session.success = 'Authenticated as ' + req.body.username 
             + ' click to <a href="/logout">logout</a>. '
@@ -134,12 +129,8 @@ app.post('/signup', function(req, res){
     authent(req.body.username, req.body.password, function(err, user){ 
     if (user) { 
         console.log('authenticate')
-        // Regenerate session when signing in 
-        // to prevent fixation
         req.session.regenerate(function(){
-            // Store the user's primary key 
-            // in the session store to be retrieved,
-            // or in this case the entire user object 
+            //Store session user as user/display username
             req.session.user = user;
             req.session.success = 'Authenticated as ' + req.body.username 
             + ' click to <a href="/logout">logout</a>. '
@@ -156,6 +147,7 @@ app.post('/signup', function(req, res){
     }); 
 }); 
 
+//Adduser function for signup
 function addUser(usr, pss)
 {
     if(usr in users)
