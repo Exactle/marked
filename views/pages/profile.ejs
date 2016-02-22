@@ -1,73 +1,34 @@
-<!-- views/profile.ejs -->
-<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
-    <title>Node Authentication</title>
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
-    <style>
-        body        { padding-top:80px; word-wrap:break-word; }
-    </style>
+
 </head>
+
 <body>
-<div class="container">
 
-    <!--<div class="page-header text-center">-->
-        <!--<h1><span class="fa fa-anchor"></span> Profile Page</h1>-->
-        <!--<a href="/logout" class="btn btn-default btn-sm">Logout</a>-->
-    <!--</div>-->
+<div id="startText"> wow this is some text lol </div>
 
-    <!--<div class="row">-->
+    <p>It's time to <br>
+    <% for(var i = 0; i < 10; i++) { %> 
+      DUEL!!! <br>
+    <% } %> </p>
 
-        <!--&lt;!&ndash; LOCAL INFORMATION &ndash;&gt;-->
-        <!--<div class="col-sm-6">-->
-            <!--<div class="well">-->
-                <!--<h3><span class="fa fa-user"></span> Local</h3>-->
+    <p>
+    ur name is <%- user %>
+    </p>
 
-                <!--<p>-->
-                    <!--<strong>id</strong>: <%= user._id %><br>-->
-                    <!--<strong>email</strong>: <%= user.local.email %><br>-->
-                    <!--<strong>password</strong>: <%= user.local.password %>-->
-                <!--</p>-->
-
-            <!--</div>-->
-        <!--</div>-->
-
-    <!--</div>-->
-
-    <canvas id="mainCanvas" width=device-width height=device-height style="background-color: #99CCFF">
-        Your browser doesn't support HTML5! omg pls fix it!!!
-    </canvas>
-
-    <script src="../lib/circles.js"></script>
-    <script>refresh();</script>
-    <script>var a = function() {
-            console.log("ouch u got me");
-            if(!isFocused())
-                focus(this);
-            else
-                defocus();
-        }</script>
-
-    <script>
-
-        var circles = [];
-        //TODO: Figure out names based on user's list of people
-
-//        circles.push(makePrettyCircleButton(a).setRadiusScale(.3).setTitle(user.local.people[0].name));
-//        circles.push(makePrettyCircleButton(a).setRadiusScale(.4).setTitle(user.local.people[1].name));
-//        circles.push(makePrettyCircleButton(a).setRadiusScale(.4).setTitle(user.local.people[2].name));
-//        circles.push(makePrettyCircleButton(a).setRadiusScale(.4).setTitle(user.local.people[3].name));
-//        circles.push(makePrettyCircleButton(a).setRadiusScale(.4).setTitle(user.local.people[4].name));
-//        circles.push(makePrettyCircleButton(a).setRadiusScale(.4).setTitle(user.local.people[5].name));
-        circles.push(makePrettyCircleButton(a).setRadiusScale(.3).setTitle("John").setSubtitle("300.55"));
-        circles.push(makePrettyCircleButton(a).setRadiusScale(.4).setTitle("Jack").setSubtitle("400.29"));
-        circles.push(makePrettyCircleButton(a).setRadiusScale(.3).setTitle("Alex").setSubtitle("275.24"));
-        circles.push(makePrettyCircleButton(a).setRadiusScale(.4).setTitle("Annie").setSubtitle("330.58"));
-        circles.push(makePrettyCircleButton(a).setRadiusScale(.4).setTitle("Chris").setSubtitle("280.00"));
-        circles.push(makePrettyCircleButton(a).setRadiusScale(.4).setTitle("Sam").setSubtitle("450.55"));
-    </script>
-
-</div>
 </body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+<script>
+$(document).ready( function() {
+  $("#startText").on('click', function() {
+    // alert("wow");
+    console.log("wow");
+
+    $.post("/javascript/", "wow bro this is a request")
+  });
+});
+</script>
+
 </html>
