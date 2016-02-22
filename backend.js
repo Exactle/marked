@@ -24,7 +24,7 @@ exports.addUser = function(name, password) {
 };
 
 exports.getUser = function(name) {
-	console.log("Tried to return " + name + ", got " + (users.get(name) ? users.get(name).name : "nothing!"));
+	//console.log("Tried to return " + name + ", got " + (users.get(name) ? users.get(name).name : "nothing!"));
 	return users.get(name);
 };
 
@@ -67,21 +67,20 @@ class User{
 		this.marks.delete(mark);
 	}
 	
-	//dunno if getMark is necessary??
 	getMark(mark){
 		return this.marks.get(mark);
 	}
 	
-	addTag(tag) {
-		this.tags.set(tag, tag);
+	addTag(name) {
+		this.tags.set(name, new Tag(name));
 	}
 	
-	removeTag(tag) {
-		this.tags.delete(tag);
+	removeTag(name) {
+		this.tags.delete(name);
 	}
 	
-	getTag(tag) {
-		return this.tags.get(tag);
+	getTag(name) {
+		return this.tags.get(name);
 	}
 
 	addGroup(name){
@@ -106,15 +105,15 @@ class Group{
 	}
 	
 	addMember(user){
-		if(!members.get(user, name)){
+		if(!this.members.has(user.name)){
 			this.members.set(user.name, user);
-			numUsers++;
+			this.numUsers++;
 		}
 	}
 	
 	removeMember(user){
 		this.members.delete(user);
-		numUsers--;
+		this.numUsers--;
 	}
 	
 	getMember(name){

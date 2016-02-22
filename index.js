@@ -209,7 +209,8 @@ app.get(/testing\/(.*)/, function(request, response) {
 	console.log(backend.getUser(name).getMark("Mark"));
 	
 	backend.getUser(name).addTag("Test tag");
-	backend.getUser(name).getTag("Test tag").addMark(backend.getUser(name).getMark("Mark"));
+	var mark1 = backend.getUser(name).getMark("Mark");
+	backend.getUser(name).getTag("Test tag").addMark(mark1);
 	backend.getUser(name).getMark("Mark").addTag("Test tag");
 	console.log("\nTag added!");
 	console.log(backend.getUser(name).getTag("Test tag").getMark("Mark"));
