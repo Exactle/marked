@@ -210,9 +210,15 @@ app.get(/profile\/(.*)/, function (request, response) {
 
     //if(user.name = request.session.user) {
     if(false) {
-
+        response.render('pages/ownProfile', {user: user});
     }
     else {
+
+        console.log(user.friends);
+    for (friend of user.friends) {
+      console.log("this is a friend: " + friend.name);
+    }
+
     	response.render('pages/profile', {user: user});
     }
 

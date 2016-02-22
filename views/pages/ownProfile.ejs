@@ -15,11 +15,10 @@
     <p> Marks: <br> </p>
     <!-- stuff here -->
 
-    <p> Following: <br> 
-    <% for (friend of user.friends.values()) { %>
-      <a href="<%- friend.name %>"> <%- friend.name %></a> <br>
+    <p> Following: <br> </p>
+    <% for (friend of user.friends) { %>
+      <a href="<%= friend.name %>"> <%- friend.name %> hello </a> why <br>
     <% } %>
-    </p>
 
 </body>
 
