@@ -207,7 +207,7 @@ app.get(/testMarks\/(.*)/, function(request, response) {
 	//backend.mark.displayMark();
 });
 
-app.get(/profile\/(.*)/, function (request, response) {
+app.get(/\/profile\/(.*)/, function (request, response) {
     var name = request.params[0];
 
 
@@ -267,9 +267,13 @@ app.get(/user\/*/, function (request, response) {
     // response.send('/a/');
 });
 
-app.post(/.*/, function (request, response) {
-    console.log("thing is:" + request.originalUrl);
-});
+// app.get(/\/addmark\/\?url/) {
+    
+// }
+
+// app.post(/.*/, function (request, response) {
+//     console.log("thing is:" + request.originalUrl);
+// });
 
 app.listen(app.get('port'), function () {
     console.log('Node app is running on port', app.get('port'));
