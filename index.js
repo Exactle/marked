@@ -79,7 +79,7 @@ function restrict(req, res, next) {
 }
 
 app.get('/', function (req, res) {
-    res.redirect('login');
+    res.redirect('signup');
 });
 
 app.get('/restricted', restrict, function (req, res) {
@@ -89,7 +89,7 @@ app.get('/restricted', restrict, function (req, res) {
 app.get('/logout', function (req, res) {
     //End user session
     req.session.destroy(function () {
-        res.redirect('/');
+        res.redirect('/login');
     });
 });
 
@@ -104,6 +104,7 @@ app.get('/signup', function (req, res) {
 });
 
 app.post('/login', function (req, res) {
+    console.log('thats an authent');
     authent(req.body.username, req.body.password, function (err, user) {
         if (user) {
         console.log("the supposed user's name is " + user.name);
@@ -115,7 +116,7 @@ app.post('/login', function (req, res) {
                 req.session.success = 'Authenticated as ' + req.body.username;
                     + ' click to <a href="/logout">logout</a>. '
                     + ' You may now access <a href="/restricted">/restricted</a>.';
-                res.redirect('back');
+                res.redirect('/profile/' + user.name);
             });
         } else {
             console.log('Authentication failed');
@@ -130,6 +131,7 @@ app.post('/login', function (req, res) {
 app.post('/signup', function (req, res) {
     addUser(req.body.username, req.body.password);
     console.log('user added');
+    console.log('thats another authent');
     authent(req.body.username, req.body.password, function (err, user) {
         if (user) {
             console.log('authenticate');
@@ -139,13 +141,12 @@ app.post('/signup', function (req, res) {
                 req.session.success = 'Authenticated as ' + req.body.username
                     + ' click to <a href="/logout">logout</a>. '
                     + ' You may now access <a href="/restricted">/restricted</a>.';
-                res.redirect('back');
+                res.redirect('/profile/' + user.name);
             });
         } else {
             console.log('Authentication failed');
             req.session.error = 'Authentication failed, please check your '
-                + ' username and password.'
-                + ' (use "karan" and "shukla")';
+                + ' username and password.';
             res.redirect('login');
         }
     });
@@ -218,7 +219,7 @@ app.get(/testing\/(.*)/, function(request, response) {
 	response.send(name + " user created! Please see console for further output.");
 });
 
-app.get(/testMarks\/(.*)/, function(request, response) {
+app.post(/testMarks\/(.*)/, function(request, response) {
 	var name = request.params[0];
 	var owner = "Sterling";
 	var url = "www.google.com";
@@ -242,9 +243,9 @@ app.get(/\/profile\/(.*)/, function (request, response) {
 
     //if(user.name = request.session.user) {
 
-    console.log("the user is: " + request.session.user);
+    console.log("the user is: " + request.session.user.name);
 
-    if (request.session.user === name) {
+    if (request.session.user.name === name) {
         response.render('pages/ownProfile', {user: user});
     }
     else {
@@ -257,6 +258,10 @@ app.get(/\/profile\/(.*)/, function (request, response) {
         response.render('pages/profile', {user: user});
     }
 
+});
+
+app.get('/makeMark', function(request, response) {
+    response.render('pages/makeMark');
 });
 
 app.get('/test', function (request, response) {
@@ -280,9 +285,9 @@ app.get('/link', function (request, response) {
 // 	});
 // });
 
-app.get('/addMark/:name/:url', function(request, response) {
-    var name = request.params.name;
-    var url = request.params.url;
+app.post('/makeMark', function(request, response) {
+    var name = request.body.name;
+    var url = request.body.url;
     console.log("the name is " + name);
     console.log("the url is " + url);
 
@@ -293,8 +298,24 @@ app.get('/addMark/:name/:url', function(request, response) {
     backend.getUser(user.name).addMark(name, user, url, null); //I DON'T KNOW WHY THIS WORKS but user.addMark(...) doesn't
     // user.addFriend(null);
     // user.addMark(name, user, url, null);
-    response.send("done");
+    response.redirect('/profile/' + user.name);
 });
+
+// app.get('/addMark/:name/:url', function(request, response) {
+//     var name = request.params.name;
+//     var url = request.params.url;
+//     console.log("the name is " + name);
+//     console.log("the url is " + url);
+
+//     var user = request.session.user;
+//     console.log(user);
+
+//     console.log("the user is " + user.name);
+//     backend.getUser(user.name).addMark(name, user, url, null); //I DON'T KNOW WHY THIS WORKS but user.addMark(...) doesn't
+//     // user.addFriend(null);
+//     // user.addMark(name, user, url, null);
+//     response.send("done");
+// });
 
 // app.post(/.*/, function (request, response) {
 //     console.log("thing is:" + request.originalUrl);

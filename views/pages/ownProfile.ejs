@@ -13,14 +13,25 @@
 
     This is your own profile!
     
-    <p> User profile: <b> <%- user.name %> </b> </p>
-    <p> Marks: <br> </p>
-    <!-- stuff here -->
+    <p> User profile: <b> <%= user.name %> </b> </p>
+    <p> Marks: <br> 
 
-    <p> Following: <br> </p>
-    <% for (friend of user.friends) { %>
-      <a href="<%= friend.name %>"> <%- friend.name %> hello </a> why <br>
+    <% for (mark of user.marks.values()) { %>
+      <a href="http://<%= mark.url %>"> <%= mark.name %></a> <br>
     <% } %>
+    <!-- stuff here -->
+    </p>
+
+    <p> Following: <br>
+    <% for (friend of user.friends.values()) { %>
+      <a href="<%= friend.name %>"> <%= friend.name %></a> <br>
+    <% } %>
+    </p>
+
+    <p> <a href="/makeMark">Make a Mark!</a></p>
+
+    <p> <a href="/logout">Logout</a></p>
+
 
 </body>
 
