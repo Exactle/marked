@@ -17,14 +17,14 @@ exports.addUser = function(name) {
 		var added = new User(name); //we should check for if the user already exists
 		users.set(name, added);
 
-		console.log(name + " created!");
+		console.log("User " + name + " created!");
 	}
 	
 	return added;
 };
 
 exports.getUser = function(name) {
-	console.log(name + " returned!");
+	//console.log(name + " returned!");
 
 	return users.get(name);
 };
@@ -33,7 +33,7 @@ exports.removeUser = function(name) {
 	users.delete(name);
 	
 	//maybe return some value here?
-	console.log(name + " removed!");
+	console.log("User " + name + " removed!");
 };
 
 
