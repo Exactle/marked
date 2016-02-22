@@ -20,7 +20,7 @@ app.get('/', function (request, response) {
 app.get(/testing\/(.*)/, function(request, response) {
 	var name = request.params[0];
 	backend.addUser(name);
-	reponse.send(backend.getUser(name).name);
+	response.send(backend.getUser(name).name);	
 });
 
 app.get(/profile\/(.*)/, function (request, response) {
