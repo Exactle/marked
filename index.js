@@ -50,8 +50,9 @@ app.use(function (req, res, next) {
 function authent(name, pass, fn) {
     if (!module.parent)
         console.log('bro we authenticating %s:%s', name, pass);
-    if (!backend.getUser(name))
+    if (!backend.getUser(name)) {
         return fn(new Error('User does not exist in ddb'));
+    }
     var password = backend.getUser(name).password;
 
     //query dummydb
@@ -60,14 +61,18 @@ function authent(name, pass, fn) {
     //         return fn(err);
     //     if(hash.toString() == user.hash)
     //         return fn(null,user);
-    if (!(password === pass))
+    if (!(password === pass)) {
+
+        console.log(backend.getUser(name));
         return fn(new Error('Password is invalid'));
-    console.log("the user is " + user + " and their password is " + password);
+    }
+    console.log("the user is " + name + " and their password is " + password);
     return fn(null, backend.getUser(name));
 }
 
 function restrict(req, res, next) {
     if (req.session.user) {
+        console.log(req.session.user);
         next();
     } else {
         req.session.error = 'ACCESS DENIED';
@@ -102,8 +107,8 @@ app.get('/signup', function (req, res) {
 
 app.post('/login', function (req, res) {
     authent(req.body.username, req.body.password, function (err, user) {
-        console.log("the supposed user's name is " + user.name);
         if (user) {
+        console.log("the supposed user's name is " + user.name);
 
             console.log('authenticate');
             req.session.regenerate(function () {
@@ -154,6 +159,7 @@ function addUser(usr, pss) {
         console.log("USER ALREADY EXISTS");
     }
     else {
+        console.log("123 " + pss);
         backend.addUser(usr, pss);
 
         // hash(pss, function(err, salt, hash){
@@ -275,10 +281,10 @@ app.get('/addMark/:name/:url', function(request, response) {
     console.log("the name is " + name);
     console.log("the url is " + url);
 
-    console.log(request.session.user);
-    var user = backend.getUser(request.session.user);
+    var user = request.session.user;
+    console.log(user);
 
-    console.log("the user is " + user);
+    console.log("the user is " + user.name);
     user.addMark(name, user, url, null);
 });
 
