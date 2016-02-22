@@ -1,10 +1,10 @@
 'use strict';
 
-var users = new Map();
-
 //any function on the "exports" object can be called in index.js like so:
 //var backend = require('backend');
 //backend.coolfunction();
+
+var users = new Map();
 
 exports.coolfunction = function() {
 	return "what"
@@ -15,6 +15,7 @@ exports.addUser = function(name) {
 	users.set(name, added);
 
 	console.log(name + " created!");
+	return added;
 };
 
 exports.getUser = function(name) {
