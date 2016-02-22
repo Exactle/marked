@@ -41,7 +41,6 @@ app.use(function (req, res, next) {
 
 var users = {};
 
-users['karan'] = 'shukla';
 
 // hash('shukla', function(err, salt, hash){
 //     if(err) throw err;
@@ -65,6 +64,7 @@ function authent(name, pass, fn) {
     //         return fn(null,user);
     if (!(users[name] === pass))
         return fn(new Error('Password is invalid'));
+    console.log("the user is " + user);
     return fn(null, user);
 }
 
@@ -104,6 +104,7 @@ app.get('/signup', function (req, res) {
 
 app.post('/login', function (req, res) {
     authent(req.body.username, req.body.password, function (err, user) {
+        console.log("the supposed user is " + user);
         if (user) {
 
             console.log('authenticate');
@@ -163,6 +164,8 @@ function addUser(usr, pss) {
         // users.usr.salt = salt;
         // users.usr.hash = hash.toString();
     }
+
+    backend.addUser(usr);
 }
 
 
@@ -208,27 +211,37 @@ app.get(/testing\/(.*)/, function(request, response) {
 	response.send(backend.getUser(name).getFriend(friend.name));
 });
 
-app.get(/profile\/(.*)/, function (request, response) {
-    console.log("why");
+app.get(/testMarks\/(.*)/, function(request, response) {
+	var name = request.params[0];
+	var owner = "Sterling";
+	var url = "www.google.com";
+	var privacy = 0;
+	backend.addMark(name, owner, url, privacy);
+	response.send("worked so far. lets try printing to console!");
+	//backend.mark.displayMark();
+});
+
+app.get(/\/profile\/(.*)/, function (request, response) {
     var name = request.params[0];
 
 
     backend.addUser(name);
     var user = backend.getUser(name);
-    user.addFriend(backend.addUser("john doe"));
-    user.addFriend(backend.addUser("jane doe"));
+    backend.addUser("john doe")
+    backend.addUser("jane doe")
+    user.addFriend(backend.getUser("john doe"));
+    user.addFriend(backend.getUser("jane doe"));
 
 
     //if(user.name = request.session.user) {
 
     console.log("the user is: " + request.session.user);
 
-    if (request.session.user === user) {
+    if (request.session.user === name) {
         response.render('pages/ownProfile', {user: user});
     }
     else {
 
-        console.log(user.friends);
         //     for (friend of user.friends
         // )
         //     {
@@ -260,22 +273,28 @@ app.get('/link', function (request, response) {
 // 	});
 // });
 
-app.get(/user\/*/, function (request, response) {
-    if (request.originalUrl === "/user/michael")
-        response.send("u a cool guy");
-    else
-        response.send("might be cool i dunno tbh");
-    // response.send('/a/');
+app.get('/addMark/:name/:url', function(request, response) {
+    var name = request.params.name;
+    var url = request.params.url;
+    console.log("the name is " + name);
+    console.log("the url is " + url);
+
+    console.log(request.session.user);
+    var user = backend.getUser(request.session.user);
+
+    console.log("the user is " + user);
+    user.addMark(name, user, url, null);
 });
 
-app.post(/.*/, function (request, response) {
-    console.log("thing is:" + request.originalUrl);
-});
+// app.post(/.*/, function (request, response) {
+//     console.log("thing is:" + request.originalUrl);
+// });
 
 app.listen(app.get('port'), function () {
     console.log('Node app is running on port', app.get('port'));
+    addUser('karan', 'shukla');
 });
 
-app.get('/newmark', function (request, response) {
+app.get('/pages/newmark', function (request, response) {
     response.send("time to ask for help");
 });

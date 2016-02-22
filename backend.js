@@ -36,6 +36,10 @@ exports.removeUser = function(name) {
 	console.log(name + " removed!");
 };
 
+exports.addMark(name, owner, url, privacy){
+	var mark = new Mark(name, owner, url, privacy);
+	Mark.displayMark();
+}
 
 class User{
 	constructor(name){
@@ -56,7 +60,7 @@ class User{
 	
 	getFriend(name){
 		return this.friends.get(name);
-	}	
+	}
 	
 	addMark(name, owner, url, privacy){
 		this.marks.set(name, new Mark(name, owner, url, privacy));
@@ -129,7 +133,7 @@ class Tag{
 	}
 	
 	addMark(mark){
-		this.marks.set(mark.name, mark);		
+		this.marks.set(mark.name, mark);
 	}
 	
 	removeMark(name){
