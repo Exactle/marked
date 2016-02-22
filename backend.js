@@ -7,6 +7,7 @@ exports.addUser = function(name) {
 	users.set(name, new User(name));
 
 	console.log(name + " created!");
+	return users.get(name);
 };
 exports.getUser = function(name) {
 	console.log(name + " returned!");
@@ -29,14 +30,14 @@ class User{
 	}
 	
 	addFriend(friend){
-		this.friends.push(this.friend);
+		this.friends[this.friends.length] = friend;
 	}
 	
 	addMark(mark){
-		this.marks.push(this.mark);
+		this.marks[this.marks.length] = mark;
 	}
 	
 	addTag(tag) {
-		this.tags.push(this.tag);
+		this.tags[this.tags.length] = tag;
 	}
 }
