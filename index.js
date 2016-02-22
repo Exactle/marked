@@ -20,8 +20,12 @@ mongoose.connect("mongodb://admin:admin@ds011268.mongolab.com:11268/markeddb");
 
 app.use(express.static(__dirname + '/public'));
 
+//Set up express application
+app.use(morgan('dev'));
+app.use(cookieParser());
+app.use(bodyParser());
+
 //required for passport
-app.use(express.cookieParser());
 app.use(session({ secret: 'Santiago???' })); // session secret
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
