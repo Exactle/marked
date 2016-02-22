@@ -11,9 +11,9 @@ exports.coolfunction = function() {
 };
 
 exports.addUser = function(name) {
-	if(users.get(name))
+	if(users.has(name))
 		console.log("User already exists!");
-	if(!users.get(name)){
+	if(!users.has(name)){
 		var added = new User(name); //we should check for if the user already exists
 		users.set(name, added);
 
@@ -58,33 +58,33 @@ class User{
 		return this.friends.get(name);
 	}	
 	
-	addMark(mark){
-		this.marks.set(mark, mark);
+	addMark(name, owner, url, privacy){
+		this.marks.set(name, new Mark(name, owner, url, privacy));
 	}
 	
-	removeMark(mark){
-		this.marks.delete(mark);
+	removeMark(name){
+		this.marks.delete(name);
 	}
 	
-	//dunno if getMark is necessary??
-	getMark(mark){
-		return this.marks.get(mark);
+	getMark(name){
+		return this.marks.get(name);
 	}
 	
-	addTag(tag) {
-		this.tags.set(tag, tag);
+	addTag(name) {
+		this.tags.set(name, new Tag(name));
 	}
 	
-	removeTag(tag) {
-		this.tags.delete(tag);
+	removeTag(name) {
+		this.tags.delete(name);
 	}
 	
-	getTag(tag) {
-		return this.tags.get(tag);
+	getTag(name) {
+		return this.tags.get(name);
 	}
 
 	addGroup(name){
-		this.groups.set(name, new Group(name));
+		var groupme = new Group(name);		
+		this.groups.set(name, groupme);
 	}
 	
 	removeGroup(name) {
@@ -104,16 +104,16 @@ class Group{
 		this.members = new Map();
 	}
 	
-	addMember(user){
-		if(!members.get(user, name)){
+	addMember(user){		
+		if(!this.members.has(user.name)){
 			this.members.set(user.name, user);
-			numUsers++;
+			this.numUsers++;
 		}
 	}
 	
 	removeMember(user){
 		this.members.delete(user);
-		numUsers--;
+		this.numUsers--;
 	}
 	
 	getMember(name){
@@ -129,15 +129,15 @@ class Tag{
 	}
 	
 	addMark(mark){
-		this.marks.set(mark, mark);
+		this.marks.set(mark.name, mark);		
 	}
 	
-	removeMark(mark){
-		this.marks.delete(mark);
+	removeMark(name){
+		this.marks.delete(name);
 	}
 	
-	getMark(mark){
-		return this.marks.get(mark);
+	getMark(name){
+		return this.marks.get(name);
 	}
 	
 }

@@ -188,12 +188,23 @@ app.get('/', function (request, response) {
 
 app.get(/testing\/(.*)/, function(request, response) {
 	var name = request.params[0];
-	var me = backend.addUser(name);	
+	backend.addUser(name);
 	var friend = backend.addUser("Xander");	
 	backend.getUser(name).addFriend(friend);
-	//me.addGroup("SE Buddies");
-	//me.getGroup("SE Buddies").addMember(friend);
-	//console.log(me.getGroup("SE Buddies").getMember(friend));
+	console.log(backend.getUser(name).getFriend(friend.name));
+	
+	backend.getUser(name).addGroup("SE Buddies");		
+	backend.getUser(name).getGroup("SE Buddies").addMember(friend);	
+	console.log(backend.getUser(name).getGroup("SE Buddies"));
+	
+	backend.getUser(name).addMark("Mark", name, "THIS IS URL", "secret privacy");
+	console.log(backend.getUser(name).getMark("Mark"));
+	
+	backend.getUser(name).addTag("Test tag");
+	backend.getUser(name).getTag("Test tag").addMark(backend.getUser(name).getMark("Mark"));
+	backend.getUser(name).getMark("Mark").addTag("Test tag");
+	console.log(backend.getUser(name).getTag("Test tag").getMark("Mark"));
+	
 	response.send(backend.getUser(name).getFriend(friend.name));
 });
 
