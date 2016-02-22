@@ -18,6 +18,8 @@ app.use(bodyParser());
 app.use(cookieParser('ooh mysterious'));
 app.use(session());
 
+console.log("im here");
+
 //Message middleware
 
 app.use(function(req, res, next){ 
@@ -263,4 +265,4 @@ app.listen(app.get('port'), function () {
 
 app.get('/newmark', function (request, response){
 	response.send("time to ask for help");
-}
+});
