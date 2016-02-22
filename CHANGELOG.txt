@@ -1,0 +1,14 @@
+# Change Log
+All notable changes to this project will be documented in this file.
+This project adheres to [Semantic Versioning](http://semver.org/).
+
+## [Unreleased]
+### Added
+- the basic User object
+- basic login system
+- a basic system for making Marks
+- basic following system
+- Interact with other websites requirement R9
+
+### Changed
+- moved Requirement 4.1 Import to 9.1
