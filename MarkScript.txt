@@ -1,0 +1,14 @@
+var name = prompt("Name your Mark");
+var url = prompt("Web Address");
+var tags = [prompt("Tag")];
+
+var privacy = prompt("Privacy Settings: Self, All, or Custom?");
+var privy;
+
+if(privacy == "self")
+privy = 0;
+else if(privacy == "Friends")
+privy = 1;
+else
+privy = 2;
+
