@@ -10,11 +10,11 @@ exports.coolfunction = function() {
 	return "what"
 };
 
-exports.addUser = function(name) {
-	if(users.has(name))
+exports.addUser = function(name, password) {
+	if(users.get(name))
 		console.log("User already exists!");
-	if(!users.has(name)){
-		var added = new User(name); //we should check for if the user already exists
+	if(!users.get(name)){
+		var added = new User(name, password); //we should check for if the user already exists
 		users.set(name, added);
 
 		console.log("User " + name + " created!");
@@ -24,8 +24,7 @@ exports.addUser = function(name) {
 };
 
 exports.getUser = function(name) {
-	//console.log(name + " returned!");
-
+	console.log("Tried to return " + name + ", got " + (users.get(name) ? users.get(name).name : "nothing!"));
 	return users.get(name);
 };
 
@@ -64,29 +63,29 @@ class User{
 		this.marks.set(name, new Mark(name, owner, url, privacy));
 	}
 	
-	removeMark(name){
-		this.marks.delete(name);
+	removeMark(mark){
+		this.marks.delete(mark);
 	}
 	
-	getMark(name){
-		return this.marks.get(name);
+	//dunno if getMark is necessary??
+	getMark(mark){
+		return this.marks.get(mark);
 	}
 	
-	addTag(name) {
-		this.tags.set(name, new Tag(name));
+	addTag(tag) {
+		this.tags.set(tag, tag);
 	}
 	
-	removeTag(name) {
-		this.tags.delete(name);
+	removeTag(tag) {
+		this.tags.delete(tag);
 	}
 	
-	getTag(name) {
-		return this.tags.get(name);
+	getTag(tag) {
+		return this.tags.get(tag);
 	}
 
 	addGroup(name){
-		var groupme = new Group(name);		
-		this.groups.set(name, groupme);
+		this.groups.set(name, new Group(name));
 	}
 	
 	removeGroup(name) {
@@ -106,16 +105,16 @@ class Group{
 		this.members = new Map();
 	}
 	
-	addMember(user){		
-		if(!this.members.has(user.name)){
+	addMember(user){
+		if(!members.get(user, name)){
 			this.members.set(user.name, user);
-			this.numUsers++;
+			numUsers++;
 		}
 	}
 	
 	removeMember(user){
 		this.members.delete(user);
-		this.numUsers--;
+		numUsers--;
 	}
 	
 	getMember(name){
@@ -134,12 +133,12 @@ class Tag{
 		this.marks.set(mark.name, mark);
 	}
 	
-	removeMark(name){
-		this.marks.delete(name);
+	removeMark(mark){
+		this.marks.delete(mark);
 	}
 	
-	getMark(name){
-		return this.marks.get(name);
+	getMark(mark){
+		return this.marks.get(mark);
 	}
 	
 }
