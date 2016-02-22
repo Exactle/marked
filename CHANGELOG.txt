@@ -9,6 +9,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - a basic system for making Marks
 - basic following system
 - Interact with other websites requirement R9
+- teammember "Karan" to requirements list
 
 ### Changed
 - moved Requirement 4.1 Import to 9.1
