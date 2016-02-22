@@ -285,7 +285,10 @@ app.get('/addMark/:name/:url', function(request, response) {
     console.log(user);
 
     console.log("the user is " + user.name);
-    user.addMark(name, user, url, null);
+    backend.getUser(user.name).addMark(name, user, url, null); //I DON'T KNOW WHY THIS WORKS but user.addMark(...) doesn't
+    // user.addFriend(null);
+    // user.addMark(name, user, url, null);
+    response.send("done");
 });
 
 // app.post(/.*/, function (request, response) {
