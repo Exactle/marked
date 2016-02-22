@@ -138,7 +138,7 @@ app.post('/signup', function(req, res){
             res.redirect('back'); 
         }); 
     } else {
-            console.log('Authentication failed')
+            console.log('Authentication failed');
         req.session.error = 'Authentication failed, please check your ' 
         + ' username and password.' 
         + ' (use "karan" and "shukla")'; 
@@ -190,10 +190,12 @@ app.get('/', function (request, response) {
 
 app.get(/testing\/(.*)/, function(request, response) {
 	var name = request.params[0];
-	backend.addUser(name);
-	backend.addUser(name);
+	var me = backend.addUser(name);	
 	var friend = backend.addUser("Xander");	
 	backend.getUser(name).addFriend(friend);
+	//me.addGroup("SE Buddies");
+	//me.getGroup("SE Buddies").addMember(friend);
+	//console.log(me.getGroup("SE Buddies").getMember(friend));
 	response.send(backend.getUser(name).getFriend(friend.name));	
 });
 

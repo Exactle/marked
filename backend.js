@@ -84,7 +84,7 @@ class User{
 	}
 
 	addGroup(name){
-		this.groups.set(name, name);
+		this.groups.set(name, new Group(name));
 	}
 	
 	removeGroup(name) {
@@ -100,15 +100,20 @@ class User{
 class Group{
 	constructor(name){
 		this.name = name;
+		this.numUsers = 0;
 		this.members = new Map();
 	}
 	
 	addMember(user){
-		this.members.set(user.name, user);
+		if(!members.get(user, name)){
+			this.members.set(user.name, user);
+			numUsers++;
+		}
 	}
 	
 	removeMember(user){
 		this.members.delete(user);
+		numUsers--;
 	}
 	
 	getMember(name){
