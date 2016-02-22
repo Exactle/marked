@@ -261,5 +261,5 @@ app.listen(app.get('port'), function () {
 });
 
 app.get('/newmark', function (request, response){
-	console.log("your move");
+	response.send("time to ask for help");
 }
