@@ -107,15 +107,15 @@ app.post('/login', function (req, res) {
     console.log('thats an authent');
     authent(req.body.username, req.body.password, function (err, user) {
         if (user) {
-        console.log("the supposed user's name is " + user.name);
+            console.log("the supposed user's name is " + user.name);
 
             console.log('authenticate');
             req.session.regenerate(function () {
                 // Store username as session user
                 req.session.user = user;
                 req.session.success = 'Authenticated as ' + req.body.username;
-                    + ' click to <a href="/logout">logout</a>. '
-                    + ' You may now access <a href="/restricted">/restricted</a>.';
+                +' click to <a href="/logout">logout</a>. '
+                + ' You may now access <a href="/restricted">/restricted</a>.';
                 res.redirect('/profile/' + user.name);
             });
         } else {
@@ -190,43 +190,43 @@ app.get('/', function (request, response) {
     response.render('login');
 });
 
-app.get(/testing\/(.*)/, function(request, response) {
-	var name = request.params[0];
-	
-	console.log("\n");
-	backend.addUser(name);
-	var friend = backend.addUser("Xander");	
-	backend.getUser(name).addFriend(friend);
-	console.log("\nFriend added!");
-	console.log(backend.getUser(name).getFriend(friend.name));
-	
-	backend.getUser(name).addGroup("SE Buddies");		
-	backend.getUser(name).getGroup("SE Buddies").addMember(friend);
-	console.log("\nGroup created!")
-	console.log(backend.getUser(name).getGroup("SE Buddies"));
-	
-	backend.getUser(name).addMark("Mark", name, "THIS IS URL", "secret privacy");
-	console.log("\nMark created!");
-	console.log(backend.getUser(name).getMark("Mark"));
-	
-	backend.getUser(name).addTag("Test tag");
-	var mark1 = backend.getUser(name).getMark("Mark");
-	backend.getUser(name).getTag("Test tag").addMark(mark1);
-	backend.getUser(name).getMark("Mark").addTag("Test tag");
-	console.log("\nTag added!");
-	console.log(backend.getUser(name).getTag("Test tag").getMark("Mark"));
-	
-	response.send(name + " user created! Please see console for further output.");
+app.get(/testing\/(.*)/, function (request, response) {
+    var name = request.params[0];
+
+    console.log("\n");
+    backend.addUser(name);
+    var friend = backend.addUser("Xander");
+    backend.getUser(name).addFriend(friend);
+    console.log("\nFriend added!");
+    console.log(backend.getUser(name).getFriend(friend.name));
+
+    backend.getUser(name).addGroup("SE Buddies");
+    backend.getUser(name).getGroup("SE Buddies").addMember(friend);
+    console.log("\nGroup created!")
+    console.log(backend.getUser(name).getGroup("SE Buddies"));
+
+    backend.getUser(name).addMark("Mark", name, "THIS IS URL", "secret privacy");
+    console.log("\nMark created!");
+    console.log(backend.getUser(name).getMark("Mark"));
+
+    backend.getUser(name).addTag("Test tag");
+    var mark1 = backend.getUser(name).getMark("Mark");
+    backend.getUser(name).getTag("Test tag").addMark(mark1);
+    backend.getUser(name).getMark("Mark").addTag("Test tag");
+    console.log("\nTag added!");
+    console.log(backend.getUser(name).getTag("Test tag").getMark("Mark"));
+
+    response.send(name + ' group created! Please see console for further output. <br> <br> Check these out! <br> <a href="/profile/Xander">User1</a> <br> <a href="/profile/' + name + '">User2</a>');
 });
 
-app.post(/testMarks\/(.*)/, function(request, response) {
-	var name = request.params[0];
-	var owner = "Sterling";
-	var url = "www.google.com";
-	var privacy = 0;
-	backend.addMark(name, owner, url, privacy);
-	response.send("worked so far. lets try printing to console!");
-	//backend.mark.displayMark();
+app.post(/testMarks\/(.*)/, function (request, response) {
+    var name = request.params[0];
+    var owner = "Sterling";
+    var url = "www.google.com";
+    var privacy = 0;
+    backend.addMark(name, owner, url, privacy);
+    response.send("worked so far. lets try printing to console!");
+    //backend.mark.displayMark();
 });
 
 app.get(/\/profile\/(.*)/, function (request, response) {
@@ -235,32 +235,40 @@ app.get(/\/profile\/(.*)/, function (request, response) {
 
     backend.addUser(name);
     var user = backend.getUser(name);
-    backend.addUser("john doe")
-    backend.addUser("jane doe")
-    user.addFriend(backend.getUser("john doe"));
-    user.addFriend(backend.getUser("jane doe"));
-
 
     //if(user.name = request.session.user) {
 
-    console.log("the user is: " + request.session.user.name);
+    if (user) {
 
-    if (request.session.user.name === name) {
-        response.render('pages/ownProfile', {user: user});
+        backend.addUser("john doe");
+        backend.addUser("jane doe");
+        user.addFriend(backend.getUser("john doe"));
+        user.addFriend(backend.getUser("jane doe"));
+
+        if (request.session.user) {
+            console.log("the user is: " + request.session.user.name);
+
+            if (request.session.user.name === name) {
+                response.render('pages/ownProfile', {user: user});
+            }
+        }
+        else {
+
+            //     for (friend of user.friends
+            // )
+            //     {
+            //         console.log("this is a friend: " + friend.name);
+            //     }
+            response.render('pages/profile', {user: user});
+        }
     }
     else {
-
-        //     for (friend of user.friends
-        // )
-        //     {
-        //         console.log("this is a friend: " + friend.name);
-        //     }
-        response.render('pages/profile', {user: user});
+        response.send("User '" + user + "' doesn't exist!");
     }
 
 });
 
-app.get('/makeMark', function(request, response) {
+app.get('/makeMark', function (request, response) {
     response.render('pages/makeMark');
 });
 
@@ -285,7 +293,7 @@ app.get('/link', function (request, response) {
 // 	});
 // });
 
-app.post('/makeMark', function(request, response) {
+app.post('/makeMark', function (request, response) {
     var name = request.body.name;
     var url = request.body.url;
     console.log("the name is " + name);

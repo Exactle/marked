@@ -11,8 +11,10 @@ exports.coolfunction = function() {
 };
 
 exports.addUser = function(name, password) {
-	if(users.get(name))
+	if(users.get(name)) {
 		console.log("User already exists!");
+		return exports.getUser(name);
+	}
 	if(!users.get(name)){
 		var added = new User(name, password); //we should check for if the user already exists
 		users.set(name, added);

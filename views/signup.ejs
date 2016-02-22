@@ -5,6 +5,9 @@
     <title>Document</title>
 </head>
 <body>
+
+    This signup page is NOT secure, please do not use passwords you use anywhere else. Thank you!
+
     <form action="" method="post">
         
 
@@ -14,7 +17,7 @@
             <div class="form-group">
             <p>
                 <legend>Signup</legend>
-                <%=locals.message%>
+                <%-locals.message%>
                 <input type="hidden" name="ip">
                 <input type="hidden" name="pc">
                 <input type="hidden" name="hour">
@@ -44,7 +47,7 @@
             </div>
 
             <div class="signup">
-                <a href="/testing/Software Engineering">Head here to test our website!</a>
+                You can just play around, or <a href="/testing/Software Engineering">head here to test our website!</a>
             </div>
     </form>
 </body>
