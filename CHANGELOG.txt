@@ -1,0 +1,21 @@
+# Change Log
+All notable changes to this project will be documented in this file.
+This project adheres to [Semantic Versioning](http://semver.org/).
+
+## [Unreleased]
+### Added
+- tagging system
+- mark interaction system
+- options for sorting/filtering of marks
+
+## [0.0.1]
+### Added
+- the basic User object
+- basic login system
+- a basic system for making Marks
+- basic following system
+- Interact with other websites requirement R9
+- teammember "Karan" to requirements list
+
+### Changed
+- moved Requirement 4.1 Import to 9.1
