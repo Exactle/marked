@@ -1,0 +1,1 @@
+exports.coolfunction = function() {return "what"};

@@ -6,7 +6,9 @@ var cookieSession = require('cookie-session');
 app.set('port', (process.env.PORT || 5000));
 
 app.use(express.static(__dirname + '/public'));
-console.log("wat");
+
+var backend = require('./backend');
+console.log(backend.coolfunction());
 // views is directory for all template files
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
@@ -26,7 +28,7 @@ app.get('/', function (request, response) {
     console.log("Cookies: ", request.cookies);
 });
 
-app.get('/profile\/(*)', function (request, response) {
+app.get(/profile\/(.*)/, function (request, response) {
     var cut = request.params[0];
     //request.originalUrl.substring(9);
     response.render('pages/profile', {user: cut})
