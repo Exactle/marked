@@ -22,22 +22,22 @@ console.log("im here");
 
 //Message middleware
 
-app.use(function(req, res, next){ 
-    var err = req.session.error 
-    , msg = req.session.success;
-    delete req.session.error; 
-    delete req.session.success; 
+app.use(function (req, res, next) {
+    var err = req.session.error
+        , msg = req.session.success;
+    delete req.session.error;
+    delete req.session.success;
     res.locals.message = '';
-    if (err) res.locals.message = '<p class="msg error">' + err + '</p>'; 
-    if (msg) res.locals.message = '<p class="msg success">' + msg + '</p>'; 
-    next(); 
-}); 
+    if (err) res.locals.message = '<p class="msg error">' + err + '</p>';
+    if (msg) res.locals.message = '<p class="msg success">' + msg + '</p>';
+    next();
+});
 
 /*////////////////////
-/
-/DUMMY LOGIN DATABASE START
-/ TODO: Replace with real database (DevelopAlexKaran has real MongoLAB setup)
-*/////////////////////
+ /
+ /DUMMY LOGIN DATABASE START
+ / TODO: Replace with real database (DevelopAlexKaran has real MongoLAB setup)
+ */////////////////////
 
 var users = {};
 
@@ -50,10 +50,10 @@ users['karan'] = 'shukla';
 //     users['karan'].hash = hash.toString();
 // })
 
-function authent(name, pass, fn){
-    if(!module.parent)
+function authent(name, pass, fn) {
+    if (!module.parent)
         console.log('bro we authenticating %s:%s', name, pass);
-    if(!(name in users))
+    if (!(name in users))
         return fn(new Error('User does not exist in ddb'));
     var user = users[name];
 
@@ -63,115 +63,114 @@ function authent(name, pass, fn){
     //         return fn(err);
     //     if(hash.toString() == user.hash)
     //         return fn(null,user);
-    if(!(users[name] === pass))
-       return fn(new Error('Password is invalid'));
-    return fn(null,user);
+    if (!(users[name] === pass))
+        return fn(new Error('Password is invalid'));
+    return fn(null, user);
 }
 
-function restrict(req, res, next){
-    if(req.session.user){
+function restrict(req, res, next) {
+    if (req.session.user) {
         next();
-    } else{
+    } else {
         req.session.error = 'ACCESS DENIED';
         res.redirect('/login');
     }
 }
 
-app.get('/', function(req,res){
+app.get('/', function (req, res) {
     res.redirect('login');
 });
 
-app.get('/restricted', restrict, function(req, res){
+app.get('/restricted', restrict, function (req, res) {
     res.send('Restricted location, please click to <a href="/logout">logout</a>');
-})
+});
 
-app.get('/logout', function(req, res){
+app.get('/logout', function (req, res) {
     //End user session
-    req.session.destroy(function(){ 
+    req.session.destroy(function () {
         res.redirect('/');
-    }); 
-}); 
+    });
+});
 
-app.get('/login', function(req, res){ 
+app.get('/login', function (req, res) {
     console.log(req.connection.remoteAddress);
     res.render('login');
-}); 
+});
 
-app.get('/signup', function(req, res){ 
+app.get('/signup', function (req, res) {
     console.log(req.connection.remoteAddress);
     res.render('signup');
-}); 
+});
 
-app.post('/login', function(req, res){
-    authent(req.body.username, req.body.password, function(err, user){ 
-    if (user) { 
+app.post('/login', function (req, res) {
+    authent(req.body.username, req.body.password, function (err, user) {
+        if (user) {
 
-        console.log('authenticate')
-        req.session.regenerate(function(){
-            // Store username as session user
-            req.session.user = user;
-            req.session.success = 'Authenticated as ' + req.body.username 
-            + ' click to <a href="/logout">logout</a>. '
-            + ' You may now access <a href="/restricted">/restricted</a>.'; 
-            res.redirect('back'); 
-        }); 
-    } else {
-            console.log('Authentication failed')
-        req.session.error = 'Authentication failed, please check your ' 
-        + ' username and password.' 
-        + ' (use "karan" and "shukla")'; 
-        res.redirect('login');
-    } 
-    }); 
-}); 
+            console.log('authenticate');
+            req.session.regenerate(function () {
+                // Store username as session user
+                req.session.user = user;
+                req.session.success = 'Authenticated as ' + req.body.username
+                    + ' click to <a href="/logout">logout</a>. '
+                    + ' You may now access <a href="/restricted">/restricted</a>.';
+                res.redirect('back');
+            });
+        } else {
+            console.log('Authentication failed');
+            req.session.error = 'Authentication failed, please check your '
+                + ' username and password.'
+                + ' (use "karan" and "shukla")';
+            res.redirect('login');
+        }
+    });
+});
 
-app.post('/signup', function(req, res){
+app.post('/signup', function (req, res) {
     addUser(req.body.username, req.body.password);
-    console.log('user added')
-    authent(req.body.username, req.body.password, function(err, user){ 
-    if (user) { 
-        console.log('authenticate')
-        req.session.regenerate(function(){
-            //Store session user as user/display username
-            req.session.user = user;
-            req.session.success = 'Authenticated as ' + req.body.username 
-            + ' click to <a href="/logout">logout</a>. '
-            + ' You may now access <a href="/restricted">/restricted</a>.'; 
-            res.redirect('back'); 
-        }); 
-    } else {
-            console.log('Authentication failed')
-        req.session.error = 'Authentication failed, please check your ' 
-        + ' username and password.' 
-        + ' (use "karan" and "shukla")'; 
-        res.redirect('login');
-    } 
-    }); 
-}); 
+    console.log('user added');
+    authent(req.body.username, req.body.password, function (err, user) {
+        if (user) {
+            console.log('authenticate');
+            req.session.regenerate(function () {
+                //Store session user as user/display username
+                req.session.user = user;
+                req.session.success = 'Authenticated as ' + req.body.username
+                    + ' click to <a href="/logout">logout</a>. '
+                    + ' You may now access <a href="/restricted">/restricted</a>.';
+                res.redirect('back');
+            });
+        } else {
+            console.log('Authentication failed');
+            req.session.error = 'Authentication failed, please check your '
+                + ' username and password.'
+                + ' (use "karan" and "shukla")';
+            res.redirect('login');
+        }
+    });
+});
 
 //Adduser function for signup
-function addUser(usr, pss)
-{
-    if(usr in users)
-        {console.log("USER ALREADY EXISTS")
-        }
-    else{
-    users[usr] = pss;
+function addUser(usr, pss) {
+    if (usr in users) {
+        console.log("USER ALREADY EXISTS");
+    }
+    else {
+        users[usr] = pss;
 
-    // hash(pss, function(err, salt, hash){ 
-    // if (err) throw err; 
-    // // store the salt & hash in the "db"
-    // users.usr.salt = salt; 
-    // users.usr.hash = hash.toString();
-    } 
+        // hash(pss, function(err, salt, hash){
+        // if (err) throw err;
+        // // store the salt & hash in the "db"
+        // users.usr.salt = salt;
+        // users.usr.hash = hash.toString();
+    }
 }
 
 
 /*////////////////////
-/
-/DUMMY LOGIN DATABASE END
-/ TODO: Replace with real database (DevelopAlexKaran has real MongoLAB setup)
-*/////////////////////
+ /
+ /DUMMY LOGIN DATABASE END
+ / TODO: Replace with real database (DevelopAlexKaran has real MongoLAB setup)
+ */////////////////////
 
 //backend
 
@@ -187,19 +186,18 @@ app.get('/', function (request, response) {
     response.render('login');
 });
 
-app.get(/testing\/(.*)/, function(request, response) {
-	var name = request.params[0];
-	backend.addUser(name);
-	backend.addUser(name);
-	var friend = backend.addUser("Xander");	
-	backend.getUser(name).addFriend(friend);
-	response.send(backend.getUser(name).getFriend(friend.name));	
+app.get(/testing\/(.*)/, function (request, response) {
+    var name = request.params[0];
+    backend.addUser(name);
+    backend.addUser(name);
+    var friend = backend.addUser("Xander");
+    backend.getUser(name).addFriend(friend);
+    response.send(backend.getUser(name).getFriend(friend.name));
 });
 
 app.get(/profile\/(.*)/, function (request, response) {
     console.log("why");
     var name = request.params[0];
-
 
 
     backend.addUser(name);
@@ -212,16 +210,18 @@ app.get(/profile\/(.*)/, function (request, response) {
 
     console.log("the user is: " + request.session.user);
 
-    if(request.session.user === user) {
+    if (request.session.user === user) {
         response.render('pages/ownProfile', {user: user});
     }
     else {
 
         console.log(user.friends);
-    for (friend of user.friends) {
-      console.log("this is a friend: " + friend.name);
-    }
-    	response.render('pages/profile', {user: user});
+        //     for (friend of user.friends
+        // )
+        //     {
+        //         console.log("this is a friend: " + friend.name);
+        //     }
+        response.render('pages/profile', {user: user});
     }
 
 });
@@ -255,14 +255,14 @@ app.get(/user\/*/, function (request, response) {
     // response.send('/a/');
 });
 
-app.post(/.*/, function(request, response) {
-	console.log("thing is:" + request.originalUrl);
+app.post(/.*/, function (request, response) {
+    console.log("thing is:" + request.originalUrl);
 });
 
 app.listen(app.get('port'), function () {
     console.log('Node app is running on port', app.get('port'));
 });
 
-app.get('/newmark', function (request, response){
-	response.send("time to ask for help");
+app.get('/newmark', function (request, response) {
+    response.send("time to ask for help");
 });

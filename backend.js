@@ -146,11 +146,11 @@ class Mark{
 		this.privacy = privacy;
 	}
 	
-	displayMark(){
-		console.log("Mark Name: " name);
-		console.log("Mark Owner: " owner);
-		console.log("Mark URL: " url);
-		console.log("Mark Privacy: " privacy);
+	displayMark() {
+		console.log("Mark Name: " + name);
+		console.log("Mark Owner: " + owner);
+		console.log("Mark URL: " + url);
+		console.log("Mark Privacy: " + privacy);
 	}
 	
 	addTag(tag){
