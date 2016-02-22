@@ -17,7 +17,7 @@ exports.addUser = function(name, password) {
 		var added = new User(name, password); //we should check for if the user already exists
 		users.set(name, added);
 
-		console.log(name + " created!");
+		console.log("User " + name + " created!");
 	}
 	
 	return added;
@@ -25,7 +25,6 @@ exports.addUser = function(name, password) {
 
 exports.getUser = function(name) {
 	console.log("Tried to return " + name + ", got " + (users.get(name) ? users.get(name).name : "nothing!"));
-
 	return users.get(name);
 };
 
@@ -33,7 +32,7 @@ exports.removeUser = function(name) {
 	users.delete(name);
 	
 	//maybe return some value here?
-	console.log(name + " removed!");
+	console.log("User " + name + " removed!");
 };
 
 

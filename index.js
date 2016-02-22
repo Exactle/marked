@@ -18,8 +18,6 @@ app.use(bodyParser());
 app.use(cookieParser('ooh mysterious'));
 app.use(session());
 
-console.log("im here");
-
 //Message middleware
 
 app.use(function (req, res, next) {
@@ -180,7 +178,7 @@ function addUser(usr, pss) {
 //backend
 
 var backend = require('./backend');
-console.log(backend.coolfunction());
+//console.log(backend.coolfunction());
 
 // views is directory for all template files
 //config
@@ -193,24 +191,30 @@ app.get('/', function (request, response) {
 
 app.get(/testing\/(.*)/, function(request, response) {
 	var name = request.params[0];
+	
+	console.log("\n");
 	backend.addUser(name);
 	var friend = backend.addUser("Xander");	
 	backend.getUser(name).addFriend(friend);
+	console.log("\nFriend added!");
 	console.log(backend.getUser(name).getFriend(friend.name));
 	
 	backend.getUser(name).addGroup("SE Buddies");		
-	backend.getUser(name).getGroup("SE Buddies").addMember(friend);	
+	backend.getUser(name).getGroup("SE Buddies").addMember(friend);
+	console.log("\nGroup created!")
 	console.log(backend.getUser(name).getGroup("SE Buddies"));
 	
 	backend.getUser(name).addMark("Mark", name, "THIS IS URL", "secret privacy");
+	console.log("\nMark created!");
 	console.log(backend.getUser(name).getMark("Mark"));
 	
 	backend.getUser(name).addTag("Test tag");
 	backend.getUser(name).getTag("Test tag").addMark(backend.getUser(name).getMark("Mark"));
 	backend.getUser(name).getMark("Mark").addTag("Test tag");
+	console.log("\nTag added!");
 	console.log(backend.getUser(name).getTag("Test tag").getMark("Mark"));
 	
-	response.send(backend.getUser(name).getFriend(friend.name));
+	response.send(name + " user created! Please see console for further output.");
 });
 
 app.get(/testMarks\/(.*)/, function(request, response) {
