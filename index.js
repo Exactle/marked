@@ -39,8 +39,6 @@ app.use(function (req, res, next) {
  / TODO: Replace with real database (DevelopAlexKaran has real MongoLAB setup)
  */////////////////////
 
-var users = {};
-
 
 // hash('shukla', function(err, salt, hash){
 //     if(err) throw err;
@@ -52,9 +50,9 @@ var users = {};
 function authent(name, pass, fn) {
     if (!module.parent)
         console.log('bro we authenticating %s:%s', name, pass);
-    if (!(name in users))
+    if (!backend.getUser(name))
         return fn(new Error('User does not exist in ddb'));
-    var user = users[name];
+    var password = backend.getUser(name).password;
 
     //query dummydb
     // hash(pass, , function(err,hash){
@@ -62,10 +60,10 @@ function authent(name, pass, fn) {
     //         return fn(err);
     //     if(hash.toString() == user.hash)
     //         return fn(null,user);
-    if (!(users[name] === pass))
+    if (!(password === pass))
         return fn(new Error('Password is invalid'));
-    console.log("the user is " + user);
-    return fn(null, user);
+    console.log("the user is " + user + " and their password is " + password);
+    return fn(null, backend.getUser(name));
 }
 
 function restrict(req, res, next) {
@@ -104,14 +102,14 @@ app.get('/signup', function (req, res) {
 
 app.post('/login', function (req, res) {
     authent(req.body.username, req.body.password, function (err, user) {
-        console.log("the supposed user is " + user);
+        console.log("the supposed user's name is " + user.name);
         if (user) {
 
             console.log('authenticate');
             req.session.regenerate(function () {
                 // Store username as session user
                 req.session.user = user;
-                req.session.success = 'Authenticated as ' + req.body.username
+                req.session.success = 'Authenticated as ' + req.body.username;
                     + ' click to <a href="/logout">logout</a>. '
                     + ' You may now access <a href="/restricted">/restricted</a>.';
                 res.redirect('back');
@@ -152,11 +150,11 @@ app.post('/signup', function (req, res) {
 
 //Adduser function for signup
 function addUser(usr, pss) {
-    if (usr in users) {
+    if (backend.getUser(usr)) {
         console.log("USER ALREADY EXISTS");
     }
     else {
-        users[usr] = pss;
+        backend.addUser(usr, pss);
 
         // hash(pss, function(err, salt, hash){
         // if (err) throw err;
@@ -164,8 +162,6 @@ function addUser(usr, pss) {
         // users.usr.salt = salt;
         // users.usr.hash = hash.toString();
     }
-
-    backend.addUser(usr);
 }
 
 
@@ -292,7 +288,7 @@ app.get('/addMark/:name/:url', function(request, response) {
 
 app.listen(app.get('port'), function () {
     console.log('Node app is running on port', app.get('port'));
-    addUser('karan', 'shukla');
+    // addUser('karan', 'shukla');
 });
 
 app.get('/pages/newmark', function (request, response) {

@@ -36,18 +36,16 @@ exports.removeUser = function(name) {
 	console.log(name + " removed!");
 };
 
-exports.addMark(name, owner, url, privacy){
-	var mark = new Mark(name, owner, url, privacy);
-	Mark.displayMark();
-}
 
 class User{
-	constructor(name){
+
+	constructor(name, password){
 		this.name = name;
 		this.friends = new Map();
 		this.groups = new Map();
 		this.marks = new Map();
 		this.tags = new Map();
+		this.password = password;
 	}
 	
 	addFriend(user){
