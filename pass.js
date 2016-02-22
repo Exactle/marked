@@ -1,25 +1,25 @@
-var crypto = require('crypto'); 
+var crypto = require('crypto');
 
 var len = 128; //byte size
 
 var iterations = 12000; //350 ms
 
-/**  
+/**
  * Hashes a password with optional `salt`
- */  
+ */
 
 exports.hash = function (pwd, salt, fn) {
-  if (3 == arguments.length) {  
- 	crypto.pbkdf2(pwd, salt, iterations, len, fn);
-  } else { 
- 	fn = salt;
- 	crypto.randomBytes(len, function(err, salt){  
-		if (err) return fn(err);  
-		salt = salt.toString('base64'); 
-		crypto.pbkdf2(pwd, salt, iterations, len, function(err, hash){
-  			if (err) return fn(err);
-  			fn(null, salt, hash);
-		});  
- 	}); 
-  }  
+    if (3 == arguments.length) {
+        crypto.pbkdf2(pwd, salt, iterations, len, fn);
+    } else {
+        fn = salt;
+        crypto.randomBytes(len, function (err, salt) {
+            if (err) return fn(err);
+            salt = salt.toString('base64');
+            crypto.pbkdf2(pwd, salt, iterations, len, function (err, hash) {
+                if (err) return fn(err);
+                fn(null, salt, hash);
+            });
+        });
+    }
 };

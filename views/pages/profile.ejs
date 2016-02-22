@@ -11,18 +11,18 @@
 
 <!-- <div id="startText"> wow this is some text lol </div> -->
 
-    <p> User profile: <b> <%- user.name %> </b> </p>
+    <p> User profile: <b> <%= user.name %> </b> </p>
     <p> Marks: <br> 
 
     <% for (mark of user.marks.values()) { %>
-      <a href="http://<%- mark.url %>"> <%- mark.name %></a> <br>
+      <a href="http://<%= mark.url %>"> <%= mark.name %></a> <br>
     <% } %>
     <!-- stuff here -->
     </p>
 
     <p> Following: <br>
     <% for (friend of user.friends.values()) { %>
-      <a href="<%- friend.name %>"> <%- friend.name %></a> <br>
+      <a href="<%= friend.name %>"> <%= friend.name %></a> <br>
     <% } %>
     </p>
 
