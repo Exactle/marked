@@ -11,10 +11,15 @@ exports.coolfunction = function() {
 };
 
 exports.addUser = function(name) {
-	var added = new User(name); //we should check for if the user already exists
-	users.set(name, added);
+	if(users.get(name))
+		console.log("User already exists!");
+	if(!users.get(name)){
+		var added = new User(name); //we should check for if the user already exists
+		users.set(name, added);
 
-	console.log(name + " created!");
+		console.log(name + " created!");
+	}
+	
 	return added;
 };
 
@@ -108,6 +113,26 @@ class Group{
 	
 	getMember(name){
 		return this.members.get(name);
+	}
+	
+}
+
+class Tag{
+	constructor(name){
+		this.name = name;
+		this.marks = new Map();
+	}
+	
+	addMark(mark){
+		this.marks.set(mark, mark);
+	}
+	
+	removeMark(mark){
+		this.marks.delete(mark);
+	}
+	
+	getMark(mark){
+		return this.marks.get(mark);
 	}
 	
 }

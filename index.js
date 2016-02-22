@@ -191,6 +191,7 @@ app.get('/', function (request, response) {
 app.get(/testing\/(.*)/, function(request, response) {
 	var name = request.params[0];
 	backend.addUser(name);
+	backend.addUser(name);
 	var friend = backend.addUser("Xander");	
 	backend.getUser(name).addFriend(friend);
 	response.send(backend.getUser(name).getFriend(friend.name));	
