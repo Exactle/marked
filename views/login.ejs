@@ -1,0 +1,46 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <form action="" method="post">
+        
+
+    </form>
+
+    <form action="login" method="POST" class="form-horizontal" role="form">
+            <div class="form-group">
+                <legend>Login</legend>
+                <%-locals.message%>
+                <input type="hidden" name="ip">
+                <input type="hidden" name="pc">
+                <input type="hidden" name="hour">
+                <input type="hidden" name="date">
+                <table>
+                    <tr>
+                        <td>User</td>
+                        <td><input type="text" name="username" value=""></td>
+                    </tr>
+                    <tr>
+                        <td>Password</td>
+                        <td><input type="password" name="password" value=""></td>
+                    </tr>
+                </table>
+
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-10 col-sm-offset-2">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+
+            <div class="signup">
+                <a href="http://markedio.herokuapp.com/signup">Not a user? Sign up here!</a>
+            </div>
+            
+    </form>
+</body>
+</html>
