@@ -36,6 +36,10 @@ exports.removeUser = function(name) {
 	console.log(name + " removed!");
 };
 
+exports.addMark(name, owner, url, privacy){
+	var mark = new Mark(name, owner, url, privacy);
+	Mark.displayMark();
+}
 
 class User{
 	constructor(name){

@@ -197,6 +197,16 @@ app.get(/testing\/(.*)/, function(request, response) {
 	response.send(backend.getUser(name).getFriend(friend.name));
 });
 
+app.get(/testMarks\/(.*)/, function(request, response) {
+	var name = request.params[0];
+	var owner = "Sterling";
+	var url = "www.google.com";
+	var privacy = 0;
+	backend.addMark(name, owner, url, privacy);
+	response.send("worked so far. lets try printing to console!");
+	//backend.mark.displayMark();
+});
+
 app.get(/profile\/(.*)/, function (request, response) {
     var name = request.params[0];
 
