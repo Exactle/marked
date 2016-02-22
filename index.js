@@ -17,6 +17,12 @@ app.get('/', function (request, response) {
     response.render('pages/index');
 });
 
+app.get(/testing\/(.*)/, function(request, response) {
+	var name = request.params[0];
+	backend.addUser(name);
+	reponse.send(backend.getUser(name).name);
+});
+
 app.get(/profile\/(.*)/, function (request, response) {
     var cut = request.params[0];
     //request.originalUrl.substring(9);
