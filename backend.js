@@ -136,3 +136,25 @@ class Tag{
 	}
 	
 }
+
+class Mark{
+	constructor(name, owner, url, privacy){
+		this.name = name;
+		this.owner = owner;
+		this.url = url;
+		this.tags = new Map();
+		this.privacy = privacy;
+	}
+	
+	displayMark(){
+		console.log("Mark Name: " name);
+		console.log("Mark Owner: " owner);
+		console.log("Mark URL: " url);
+		console.log("Mark Privacy: " privacy);
+	}
+	
+	addTag(tag){
+		this.tags.set(tag, tag);
+	}
+	
+}
