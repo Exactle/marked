@@ -1,8 +1,24 @@
 'use strict';
-exports.coolfunction = function() {return "what"};
-exports.addUser = function(name) {console.log(name + "created!")};
-exports.getUser = function(name) {console.log(name + "returned!")};
-exports.removeUser = function(name) {console.log(name + "removed!")};
+
+users = new Map();
+
+// exports.coolfunction = function() {return "what"};
+exports.addUser = function(name) {
+	users.set(name, new User(name));
+
+	console.log(name + "created!");
+};
+exports.getUser = function(name) {
+	console.log(name + "returned!");
+
+	return users.get(name);
+};
+exports.removeUser = function(name) {
+	users.delete(name);
+	
+	console.log(name + "removed!");
+};
+
 
 class User{
 	constructor(name){
