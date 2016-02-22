@@ -249,7 +249,7 @@ app.get('/link', function (request, response) {
 // 	});
 // });
 
-app.get(/\/user\/*/, function (request, response) {
+app.get(/user\/*/, function (request, response) {
     if (request.originalUrl === "/user/michael")
         response.send("u a cool guy");
     else
@@ -257,7 +257,9 @@ app.get(/\/user\/*/, function (request, response) {
     // response.send('/a/');
 });
 
-// app.get(/addmark)
+// app.get(/\/addmark\/\?url/) {
+    
+// }
 
 // app.post(/.*/, function (request, response) {
 //     console.log("thing is:" + request.originalUrl);

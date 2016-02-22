@@ -56,10 +56,10 @@ class User{
 	
 	getFriend(name){
 		return this.friends.get(name);
-	}	
+	}
 	
-	addMark(mark){
-		this.marks.set(mark, mark);
+	addMark(name, owner, url, privacy){
+		this.marks.set(name, new Mark(name, owner, url, privacy));
 	}
 	
 	removeMark(mark){
@@ -129,7 +129,7 @@ class Tag{
 	}
 	
 	addMark(mark){
-		this.marks.set(mark, mark);
+		this.marks.set(mark.name, mark);
 	}
 	
 	removeMark(mark){
