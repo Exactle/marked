@@ -198,26 +198,26 @@ app.get(/testing\/(.*)/, function(request, response) {
 });
 
 app.get(/profile\/(.*)/, function (request, response) {
-    console.log("why");
     var name = request.params[0];
 
 
     backend.addUser(name);
     var user = backend.getUser(name);
-    user.addFriend(backend.addUser("john doe"));
-    user.addFriend(backend.addUser("jane doe"));
+    backend.addUser("john doe")
+    backend.addUser("jane doe")
+    user.addFriend(backend.getUser("john doe"));
+    user.addFriend(backend.getUser("jane doe"));
 
 
     //if(user.name = request.session.user) {
 
     console.log("the user is: " + request.session.user);
 
-    if (request.session.user === user) {
+    if (request.session.user === name) {
         response.render('pages/ownProfile', {user: user});
     }
     else {
 
-        console.log(user.friends);
         //     for (friend of user.friends
         // )
         //     {
