@@ -1,25 +1,28 @@
 <!DOCTYPE html>
 <html>
+
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script> -->
+
 <head>
 
 </head>
 
 <body>
 
-<div id="startText"> wow this is some text lol </div>
+<!-- <div id="startText"> wow this is some text lol </div> -->
 
-    <p>It's time to <br>
-    <% for(var i = 0; i < 10; i++) { %> 
-      DUEL!!! <br>
-    <% } %> </p>
+    <p> User profile: <b> <%- user.name %> </b> </p>
+    <p> Marks: <br> </p>
+    <!-- stuff here -->
 
-    <p>
-    ur name is <%- user %>
-    </p>
+    <p> Following: <br> </p>
+    <% for (friend of user.friends) { %>
+     <%- friend.name %> <br>
+    <% } %>
 
 </body>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+<!--
 <script>
 $(document).ready( function() {
   $("#startText").on('click', function() {
@@ -29,6 +32,6 @@ $(document).ready( function() {
     $.post("/javascript/", "wow bro this is a request")
   });
 });
-</script>
+</script> -->
 
 </html>

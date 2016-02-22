@@ -26,9 +26,24 @@ app.get(/testing\/(.*)/, function(request, response) {
 });
 
 app.get(/profile\/(.*)/, function (request, response) {
-    var cut = request.params[0];
-    //request.originalUrl.substring(9);
-    response.render('pages/profile', {user: cut})
+    var name = request.params[0];
+
+
+
+    backend.addUser(name);
+    var user = backend.getUser(name);
+    user.addFriend(backend.addUser("john doe"));
+    user.addFriend(backend.addUser("jane doe"));
+
+
+    //if(user.name = request.session.user) {
+    if(false) {
+
+    }
+    else {
+    	response.render('pages/profile', {user: user});
+    }
+
 });
 
 app.get('/test', function (request, response) {
