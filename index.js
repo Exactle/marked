@@ -71,7 +71,7 @@ function restrict(req, res, next){
         next();
     } else{
         req.session.error = 'ACCESS DENIED';
-        res.rederict('/login');
+        res.redirect('/login');
     }
 }
 
@@ -165,9 +165,6 @@ function addUser(usr, pss)
 }
 
 
-app.listen(5000); 
-console.log('Express started on port ' + 5000);
-
 /*////////////////////
 /
 /DUMMY LOGIN DATABASE END
@@ -198,6 +195,7 @@ app.get(/testing\/(.*)/, function(request, response) {
 });
 
 app.get(/profile\/(.*)/, function (request, response) {
+    console.log("why");
     var name = request.params[0];
 
 
@@ -209,7 +207,10 @@ app.get(/profile\/(.*)/, function (request, response) {
 
 
     //if(user.name = request.session.user) {
-    if(false) {
+
+    console.log("the user is: " + request.session.user);
+
+    if(request.session.user === user) {
         response.render('pages/ownProfile', {user: user});
     }
     else {
@@ -218,13 +219,13 @@ app.get(/profile\/(.*)/, function (request, response) {
     for (friend of user.friends) {
       console.log("this is a friend: " + friend.name);
     }
-
     	response.render('pages/profile', {user: user});
     }
 
 });
 
 app.get('/test', function (request, response) {
+    console.log("test");
     response.send('<a href="/link"> Go to that cool page</a>');
 });
 
