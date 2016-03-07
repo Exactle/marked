@@ -1,0 +1,29 @@
+R2: Users can bookmark URLs, known as Marks
+What are the use cases?
+	Actor - a single user
+	verb phrase - Users bookmark URLs
+	verb phrase - Each Mark has a customizable privacy setting -> The user can customize privacy for each mark
+
+	Bookmark a URL
+	Customize a privacy setting
+
+R4: Each user has a list of friends.
+	Actor - a single user
+	verb phrase - Friends can be imported
+	verb phrase - Following a friend
+	verb phrase - Sort into groups
+	verb phrase - View friends' profiles
+
+	Import friends
+	Follow friends (search for friends?)
+	Sort/group friends
+	View a user profile
+
+List of use cases:
+	Mark a URL (requirements 2, 4.4, 5, 6, 7, 8)
+	Customize a privacy setting (requirement 2.1, 8)
+	Import friends (requirement 4.1)
+	Search for friends (no requirement matched)
+		-Follow friends (requirement 4.2)
+	Sort/group friends (requirement 4.3, 7)
+	View a user profile (requirement 2.1, more...?)
