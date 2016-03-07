@@ -151,6 +151,7 @@ class Mark {
         this.url = url;
         this.tags = new Map();
         this.privacy = privacy;
+        this.views = 0
     }
 
     displayMark() {
