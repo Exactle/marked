@@ -1,4 +1,6 @@
-//marks is a Map()
+//WARNING: IDK if any of this works
+
+//marks is a Map
 function sortByViews(marks){
 
 	array = convertMapToArray(marks)
@@ -35,7 +37,7 @@ function sortByViews(marks){
 	 
 	    return result;
 	}
-	
+
 	return mergeSort(array)
 }
 
@@ -80,7 +82,6 @@ function sortByChecks(marks){
 }
 
 function convertMapToArray(map){
-
 	var array = [], item;
 
 	for (var type in map) {
