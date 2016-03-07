@@ -152,6 +152,7 @@ class Mark {
         this.tags = new Map();
         this.privacy = privacy;
         this.views = 0
+        this.checks = 0
     }
 
     displayMark() {
@@ -159,6 +160,8 @@ class Mark {
         console.log("Mark Owner: " + owner);
         console.log("Mark URL: " + url);
         console.log("Mark Privacy: " + privacy);
+        console.log("Number of Views: " + views);
+        console.log("Number of Checks: " + checks);
     }
 
     addTag(tag) {
