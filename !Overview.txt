@@ -1,0 +1,47 @@
+Using Node.js
+	To run the website:
+		'node index.js' in Command Prompt
+		then go to http://localhost:5000 in Chrome
+		for debugging:
+			chrome tools (Ctrl+Shift+I)
+			Console.log statements
+		'npm install' if there are problems
+
+backend.js
+	Holds our business objects
+	You'll probably be working on it, as it's the easiest to work on without abstruse knowledge of our stack
+	'exports' object - add functions to it to use them in index.js
+	Maps are important. They're like Java HashMaps
+		set (key, value)
+		get (key)
+		delete (key)
+		has (key)
+
+		https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map
+
+index.js
+	is the "controller"
+	We use Express to set up the server
+		Ignore most of it
+		app.get('/url', function (req, res) {
+			//your callback code goes here
+		});
+
+		This callback will be run when the user goes to localhost:5000/url (or marked.io/url, etc)
+
+		"function (req, res) {...}" is a function that takes two arguments "req" and "res"
+
+		"res" is the main one you use, you can send a response to the user. ex, res.render
+		"req" lets you see more about the user's request
+
+		http://expressjs.com/en/4x/api.html#res
+		http://expressjs.com/en/4x/api.html#req
+
+EJS
+	is the "view"
+	activated by res.render
+	<% will run this javascript %>
+	<%= will print this output (sanitized) =%>
+	<%- will print this output (unsanitized BE CAREFUL PLEASE) -%>
+
+	https://github.com/mde/ejs
