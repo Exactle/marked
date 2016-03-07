@@ -15,7 +15,7 @@
     <p> Marks: <br> 
 
     <% for (mark of user.marks.values()) { %>
-      <a href="http://<%= mark.url %>"> <%= mark.name %></a> <br>
+      <a href="<%= mark.url %>"> <%= mark.name %></a> <br>
     <% } %>
     <!-- stuff here -->
     </p>
