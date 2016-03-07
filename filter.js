@@ -12,6 +12,16 @@ function filterByTag(marks, tag){
 }
 
 
+function filterByOwner(marks, owner){
+	array = convertMapToArray(marks);
+
+	function ownedBy(mark){
+		return owner = mark.owner
+	}
+
+	return array.filter(ownedBy);
+}
+
 
 function convertMapToArray(map){
 	var array = [], item;
