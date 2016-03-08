@@ -121,8 +121,7 @@ app.post('/login', function (req, res) {
         } else {
             console.log('Authentication failed');
             req.session.error = 'Authentication failed, please check your '
-                + ' username and password.'
-                + ' (use "karan" and "shukla")';
+                + ' username and password.';
             res.redirect('login');
         }
     });
