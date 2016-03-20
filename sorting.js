@@ -2,7 +2,6 @@
 
 //marks is a Map
 function sortByViews(marks){
-
 	array = convertMapToArray(marks)
 
 	function mergeSort(arr)
