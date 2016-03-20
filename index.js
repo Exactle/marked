@@ -61,12 +61,13 @@ app.post('/login', function (req, res) {
     console.log('thats an authent');
     authent(req.body.username, req.body.password, function (err, user) {
         if (user) {
+            console.log('LOGIN the thing is ' + user.constructor)
             console.log("the supposed user's name is " + user.name);
 
             console.log('authenticate');
             req.session.regenerate(function () {
                 // Store username as session user
-                req.session.user = user;
+                req.session.username = user.name;
                 req.session.success = 'Authenticated as ' + req.body.username;
                 +' click to <a href="/logout">logout</a>. '
                 + ' You may now access <a href="/restricted">/restricted</a>.';
@@ -95,7 +96,7 @@ app.post('/signup', function (req, res) {
             console.log('authenticate');
             req.session.regenerate(function () {
                 //Store session user as user/display username
-                req.session.user = user;
+                req.session.username = user.name;
                 req.session.success = 'Authenticated as ' + req.body.username
                     + ' click to <a href="/logout">logout</a>. '
                     + ' You may now access <a href="/restricted">/restricted</a>.';
@@ -148,8 +149,8 @@ function authent(name, pass, fn) {
 }
 
 function restrict(req, res, next) {
-    if (req.session.user) {
-        console.log(req.session.user);
+    if (req.session.username) {
+        console.log(req.session.username);
         next();
     } else {
         req.session.error = 'ACCESS DENIED';
@@ -189,7 +190,7 @@ app.get(/\/profile\/(.*)/, function (req, res) {
     var name = req.params[0];
     var user = backend.getUser(name);
 
-    //if(user.name = req.session.user) {
+    //if(user.name = req.session.username) {
 
     if (user) {
 
@@ -198,10 +199,10 @@ app.get(/\/profile\/(.*)/, function (req, res) {
         user.addFriend(backend.getUser("john doe"));
         user.addFriend(backend.getUser("jane doe"));
 
-        if (req.session.user) {
-            console.log("the user is: " + req.session.user.name);
+        if (req.session.username) {
+            console.log("the user is: " + req.session.username);
 
-            if (req.session.user.name === name) {
+            if (req.session.username === name) {
                 res.render('pages/ownProfile', {user: user});
             }
         }
@@ -230,16 +231,10 @@ app.post('/makeMark', function (req, res) {
     console.log("the name is " + name);
     console.log("the url is " + url);
 
-    var user = req.session.user;
-    console.log(user);
-    console.log(user.constructor);
+    var user = backend.getUser(req.session.username);
 
     console.log("the user is " + user.name);
-    if(backend.getUser(user.name) !== user)
-        console.log("its super borked"); //I am trying to figure this bug out rn - Milo
-    backend.getUser(user.name).addMark(name, user, url, null); //I DON'T KNOW WHY THIS WORKS but user.addMark(...) doesn't
-    // user.addFriend(null);
-    // user.addMark(name, user, url, null);
+    user.addMark(name, user, url, null); //TODO if the mark does not have http:// or some other protocol then we need to add it or it breaks
     res.redirect('/profile/' + user.name);
 });
 
