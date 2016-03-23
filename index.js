@@ -238,7 +238,7 @@ app.post('/followUser', function (req, res) {
     var thisUser = backend.getUser(req.session.username);
     var userToFollow = backend.getUser(req.body.name);
     if(userToFollow) {
-        thisUser.addFriend(userToFollow); //TODO if the mark does not have http:// or some other protocol then we need to add it or it breaks
+        thisUser.addFriend(userToFollow);
     }
     //TODO else fail more nicely
     res.redirect('/profile/' + thisUser.name);
