@@ -37,25 +37,32 @@ exports.removeUser = function (name) {
     console.log("User " + name + " removed!");
 };
 
-exports.sortByName = function(a, b) {
+exports.sorts = new Map();
+
+exports.sorts.set("name", function(a, b) {
 	return a.name.localeCompare(b.name);
-};
+});
 
-exports.sortByChecks = function(a,b) {
+exports.sorts.set("username", function(a,b) {
+	return a.owner.name.localeCompare(b.owner.name); //check
+});
+
+exports.sorts.set("url", function(a,b) {
+	return a.url.localeCompare(b.url); //check
+});
+
+exports.sorts.set("checks", function(a,b) {
 	return 0; //TODO
-};
+});
 
-exports.sortByClicks = function(a,b) {
+exports.sorts.set("clicks", function(a,b) {
 	return 0; //TODO
-};
+});
 
-exports.sortByOwner = function(a,b) {
-	return a.user.name.localeCompare(b.user.name); //check
-};
-
-exports.sortByTags = function(a,b) {
+exports.sorts.set("tags", function(a,b) {
 	return 0; //TODO
-};
+});
+
 
 class User {
 
@@ -181,6 +188,9 @@ class Tag {
 
 class Mark {
     constructor(name, owner, url, privacy) {
+    	if(!owner) {
+    		console.trace();
+    	}
         this.name = name;
         this.owner = owner;
         this.url = url;

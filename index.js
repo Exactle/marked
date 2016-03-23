@@ -191,10 +191,12 @@ app.get(/\/profile\/(.*)/, function (req, res) {
 
     //if(user.name = req.session.username) {
 
+    console.log("THE SORT IS" + req.query.sort);
+
     if (user) {
 
         if (req.session.username === name) {
-            res.render('pages/ownProfile', {user: user});
+            res.render('pages/ownProfile', {user: user, sort:backend.sorts.get(req.query.sort)});
         }
     
         else {
@@ -203,7 +205,7 @@ app.get(/\/profile\/(.*)/, function (req, res) {
             //     {
             //         console.log("this is a friend: " + friend.name);
             //     }
-            res.render('pages/profile', {user: user});
+            res.render('pages/profile', {user: user, sort:backend.sorts.get(req.query.sort)});
         }
     }
     else {
@@ -344,9 +346,6 @@ app.get('/init', function (req, res) {
     milo.addMark('yy', milo, "www.google.com");
     authent('milo', 'pass', function (err, user) {
         if (user) {
-            console.log('LOGIN the thing is ' + user.constructor)
-            console.log("the supposed user's name is " + user.name);
-
             console.log('authenticate');
             req.session.regenerate(function () {
                 // Store username as session user
