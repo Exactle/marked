@@ -16,7 +16,7 @@
     <p> User profile: <b> <%= user.name %> </b> </p>
     <p> Marks: <br> 
 
-    <% for (mark of user.marks.values()) { %>
+    <% for (mark of user.getMarks()) { %>
       <a href="<%= mark.url %>"> <%= mark.name %></a> <br>
     <% } %>
     <!-- stuff here -->

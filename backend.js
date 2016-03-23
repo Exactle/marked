@@ -37,6 +37,25 @@ exports.removeUser = function (name) {
     console.log("User " + name + " removed!");
 };
 
+exports.sortByName = function(a, b) {
+	return a.name.localeCompare(b.name);
+};
+
+exports.sortByChecks = function(a,b) {
+	return 0; //TODO
+};
+
+exports.sortByClicks = function(a,b) {
+	return 0; //TODO
+};
+
+exports.sortByOwner = function(a,b) {
+	return a.user.name.localeCompare(b.user.name); //check
+};
+
+exports.sortByTags = function(a,b) {
+	return 0; //TODO
+};
 
 class User {
 
@@ -95,6 +114,22 @@ class User {
 
     getGroup(name) {
         return this.groups.get(name);
+    }
+
+    getMarks(optionalSort) {
+    	if(!optionalSort) {
+    		optionalSort = exports.sortByName;
+    	}
+
+    	var marks = new Array();
+    	for(let marko of this.marks.values()) {
+    		marks.push(marko);
+    	}
+    	marks = marks.sort(optionalSort);
+
+    	console.log("GETMARKS we got the marks");
+
+    	return marks;
     }
 
 }

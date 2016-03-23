@@ -61,7 +61,6 @@ app.post('/login', function (req, res) {
     console.log('thats an authent');
     authent(req.body.username, req.body.password, function (err, user) {
         if (user) {
-            console.log('LOGIN the thing is ' + user.constructor)
             console.log("the supposed user's name is " + user.name);
 
             console.log('authenticate');
@@ -338,6 +337,11 @@ app.get('/init', function (req, res) {
     backend.addUser('alex');
     backend.addUser('krystal');
     backend.addUser('xander');
+    var milo = backend.getUser('milo');
+    milo.addMark('aa', milo, "www.google.com");
+    milo.addMark('zz', milo, "www.google.com");
+    milo.addMark('bb', milo, "www.google.com");
+    milo.addMark('yy', milo, "www.google.com");
     authent('milo', 'pass', function (err, user) {
         if (user) {
             console.log('LOGIN the thing is ' + user.constructor)
