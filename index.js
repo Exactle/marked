@@ -61,7 +61,6 @@ app.post('/login', function (req, res) {
     console.log('thats an authent');
     authent(req.body.username, req.body.password, function (err, user) {
         if (user) {
-            console.log('LOGIN the thing is ' + user.constructor)
             console.log("the supposed user's name is " + user.name);
 
             console.log('authenticate');
@@ -192,27 +191,21 @@ app.get(/\/profile\/(.*)/, function (req, res) {
 
     //if(user.name = req.session.username) {
 
+    console.log("THE SORT IS" + req.query.sort);
+
     if (user) {
 
-        backend.addUser("john doe");
-        backend.addUser("jane doe");
-        user.addFriend(backend.getUser("john doe"));
-        user.addFriend(backend.getUser("jane doe"));
-
-        if (req.session.username) {
-            console.log("the user is: " + req.session.username);
-
-            if (req.session.username === name) {
-                res.render('pages/ownProfile', {user: user});
-            }
+        if (req.session.username === name) {
+            res.render('pages/ownProfile', {user: user, sort:backend.sorts.get(req.query.sort)});
         }
+    
         else {
 
             //     for (friend of user.friends)
             //     {
             //         console.log("this is a friend: " + friend.name);
             //     }
-            res.render('pages/profile', {user: user});
+            res.render('pages/profile', {user: user, sort:backend.sorts.get(req.query.sort)});
         }
     }
     else {
@@ -237,6 +230,21 @@ app.post('/makeMark', function (req, res) {
     user.addMark(name, user, url, null); //TODO if the mark does not have http:// or some other protocol then we need to add it or it breaks
     res.redirect('/profile/' + user.name);
 });
+
+app.get('/followUser', function(req, res) {
+    res.render('pages/followUser');
+});
+
+app.post('/followUser', function (req, res) {
+    var thisUser = backend.getUser(req.session.username);
+    var userToFollow = backend.getUser(req.body.name);
+    if(userToFollow) {
+        thisUser.addFriend(userToFollow);
+    }
+    //TODO else fail more nicely
+    res.redirect('/profile/' + thisUser.name);
+});
+
 
 ///TESTING AND EXAMPLES
 ///BELOW THIS LINE
@@ -324,4 +332,34 @@ app.get('/link', function (req, res) {
 
 app.listen(app.get('port'), function () {
     console.log('Node app is running on port', app.get('port'));
+});
+
+app.get('/init', function (req, res) {
+    backend.addUser('milo', 'pass');
+    backend.addUser('alex');
+    backend.addUser('krystal');
+    backend.addUser('xander');
+    var milo = backend.getUser('milo');
+    milo.addMark('aa', milo, "www.google.com");
+    milo.addMark('zz', milo, "www.google.com");
+    milo.addMark('bb', milo, "www.google.com");
+    milo.addMark('yy', milo, "www.google.com");
+    authent('milo', 'pass', function (err, user) {
+        if (user) {
+            console.log('authenticate');
+            req.session.regenerate(function () {
+                // Store username as session user
+                req.session.username = user.name;
+                req.session.success = 'Authenticated as ' + req.body.username;
+                +' click to <a href="/logout">logout</a>. '
+                + ' You may now access <a href="/restricted">/restricted</a>.';
+                res.redirect('/profile/' + user.name);
+            });
+        } else {
+            console.log('Authentication failed');
+            req.session.error = 'Authentication failed, please check your '
+                + ' username and password.';
+            res.redirect('login');
+        }
+    });
 });

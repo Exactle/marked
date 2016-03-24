@@ -37,6 +37,32 @@ exports.removeUser = function (name) {
     console.log("User " + name + " removed!");
 };
 
+exports.sorts = new Map();
+
+exports.sorts.set("name", function(a, b) {
+	return a.name.localeCompare(b.name);
+});
+
+exports.sorts.set("username", function(a,b) {
+	return a.owner.name.localeCompare(b.owner.name); //check
+});
+
+exports.sorts.set("url", function(a,b) {
+	return a.url.localeCompare(b.url); //check
+});
+
+exports.sorts.set("checks", function(a,b) {
+	return 0; //TODO
+});
+
+exports.sorts.set("clicks", function(a,b) {
+	return 0; //TODO
+});
+
+exports.sorts.set("tags", function(a,b) {
+	return 0; //TODO
+});
+
 class User {
 
     constructor(name, password) {
@@ -99,6 +125,22 @@ class User {
         return this.groups.get(name);
     }
 
+    getMarks(optionalSort) {
+    	if(!optionalSort) {
+    		optionalSort = exports.sortByName;
+    	}
+
+    	var marks = new Array();
+    	for(let marko of this.marks.values()) {
+    		marks.push(marko);
+    	}
+    	marks = marks.sort(optionalSort);
+
+    	console.log("GETMARKS we got the marks");
+
+    	return marks;
+    }
+
 }
 
 class Group {
@@ -148,6 +190,9 @@ class Tag {
 
 class Mark {
     constructor(name, owner, url, privacy) {
+    	if(!owner) {
+    		console.trace();
+    	}
         this.name = name;
         this.owner = owner;
         this.url = url;

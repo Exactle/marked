@@ -14,11 +14,15 @@
     <p> User profile: <b> <%= user.name %> </b> </p>
     <p> Marks: <br> 
 
-    <% for (mark of user.marks.values()) { %>
-      <a href="<%= mark.url %>"> <%= mark.name %> </a> <a href=""> Check </a> <br>
+    <% for (mark of user.getMarks(sort)) { %>
+      <a href="<%= mark.url %>"> <%= mark.name %></a> <br>
     <% } %>
     <!-- stuff here -->
     </p>
+
+    <p> <a href="?sort=name"> Sort by Mark name </a>
+     <a href="?sort=url"> Sort by Mark URL </a>
+     <a href="?sort=username"> Sort by username </a> </p>
 
     <p> Following: <br>
     <% for (friend of user.friends.values()) { %>
