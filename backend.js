@@ -37,7 +37,6 @@ exports.removeUser = function (name) {
     console.log("User " + name + " removed!");
 };
 
-
 class User {
 
     constructor(name, password) {
@@ -47,6 +46,9 @@ class User {
         this.marks = new Map();
         this.tags = new Map();
         this.password = password;
+
+        //messy
+        this.checks = new Map();
     }
 
     addFriend(user) {
@@ -151,6 +153,9 @@ class Mark {
         this.url = url;
         this.tags = new Map();
         this.privacy = privacy;
+
+        //checks are messy
+        this.checks = new Array();
     }
 
     displayMark() {
@@ -164,4 +169,8 @@ class Mark {
         this.tags.set(tag, tag);
     }
 
+    addCheck(checkingUser) {
+    	checks.add(checkingUser);
+    	user.checks.push(this);
+    }
 }
