@@ -6,7 +6,13 @@ var session = require('express-session')
 
 var app = express();
 
+var backend = require('./backend');
+//e.g. console.log(backend.coolfunction());
+
 app.set('port', (process.env.PORT || 5000));
+
+app.set('views', __dirname + '/views');
+app.set('view engine', 'ejs');
 
 //Authentication tools
 var port = process.env.PORT || 5000;
@@ -29,6 +35,79 @@ app.use(function (req, res, next) {
     if (err) res.locals.message = '<p class="msg error">' + err + '</p>';
     if (msg) res.locals.message = '<p class="msg success">' + msg + '</p>';
     next();
+});
+
+app.get('/', function (req, res) {
+    res.redirect('signup');
+});
+
+app.get('/restricted', restrict, function (req, res) {
+    res.send('Restricted location, please click to <a href="/logout">logout</a>');
+});
+
+app.get('/logout', function (req, res) {
+    //End user session
+    req.session.destroy(function () {
+        res.redirect('/login');
+    });
+});
+
+app.get('/login', function (req, res) {
+    console.log(req.connection.remoteAddress);
+    res.render('login');
+});
+
+app.post('/login', function (req, res) {
+    console.log('thats an authent');
+    authent(req.body.username, req.body.password, function (err, user) {
+        if (user) {
+            console.log("the supposed user's name is " + user.name);
+
+            console.log('authenticate');
+            req.session.regenerate(function () {
+                // Store username as session user
+                req.session.username = user.name;
+                req.session.success = 'Authenticated as ' + req.body.username;
+                +' click to <a href="/logout">logout</a>. '
+                + ' You may now access <a href="/restricted">/restricted</a>.';
+                res.redirect('/profile/' + user.name);
+            });
+        } else {
+            console.log('Authentication failed');
+            req.session.error = 'Authentication failed, please check your '
+                + ' username and password.';
+            res.redirect('login');
+        }
+    });
+});
+
+app.get('/signup', function (req, res) {
+    console.log(req.connection.remoteAddress);
+    res.render('signup');
+});
+
+app.post('/signup', function (req, res) {
+    addUser(req.body.username, req.body.password);
+    console.log('user added');
+    console.log('thats another authent');
+    authent(req.body.username, req.body.password, function (err, user) {
+        if (user) {
+            console.log('authenticate');
+            req.session.regenerate(function () {
+                //Store session user as user/display username
+                req.session.username = user.name;
+                req.session.success = 'Authenticated as ' + req.body.username
+                    + ' click to <a href="/logout">logout</a>. '
+                    + ' You may now access <a href="/restricted">/restricted</a>.';
+                res.redirect('/profile/' + user.name);
+            });
+        } else {
+            console.log('Authentication failed');
+            req.session.error = 'Authentication failed, please check your '
+                + ' username and password.';
+            res.redirect('login');
+        }
+    });
 });
 
 /*////////////////////
@@ -69,87 +148,14 @@ function authent(name, pass, fn) {
 }
 
 function restrict(req, res, next) {
-    if (req.session.user) {
-        console.log(req.session.user);
+    if (req.session.username) {
+        console.log(req.session.username);
         next();
     } else {
         req.session.error = 'ACCESS DENIED';
         res.redirect('/login');
     }
 }
-
-app.get('/', function (req, res) {
-    res.redirect('signup');
-});
-
-app.get('/restricted', restrict, function (req, res) {
-    res.send('Restricted location, please click to <a href="/logout">logout</a>');
-});
-
-app.get('/logout', function (req, res) {
-    //End user session
-    req.session.destroy(function () {
-        res.redirect('/login');
-    });
-});
-
-app.get('/login', function (req, res) {
-    console.log(req.connection.remoteAddress);
-    res.render('login');
-});
-
-app.get('/signup', function (req, res) {
-    console.log(req.connection.remoteAddress);
-    res.render('signup');
-});
-
-app.post('/login', function (req, res) {
-    console.log('thats an authent');
-    authent(req.body.username, req.body.password, function (err, user) {
-        if (user) {
-            console.log("the supposed user's name is " + user.name);
-
-            console.log('authenticate');
-            req.session.regenerate(function () {
-                // Store username as session user
-                req.session.user = user;
-                req.session.success = 'Authenticated as ' + req.body.username;
-                +' click to <a href="/logout">logout</a>. '
-                + ' You may now access <a href="/restricted">/restricted</a>.';
-                res.redirect('/profile/' + user.name);
-            });
-        } else {
-            console.log('Authentication failed');
-            req.session.error = 'Authentication failed, please check your '
-                + ' username and password.';
-            res.redirect('login');
-        }
-    });
-});
-
-app.post('/signup', function (req, res) {
-    addUser(req.body.username, req.body.password);
-    console.log('user added');
-    console.log('thats another authent');
-    authent(req.body.username, req.body.password, function (err, user) {
-        if (user) {
-            console.log('authenticate');
-            req.session.regenerate(function () {
-                //Store session user as user/display username
-                req.session.user = user;
-                req.session.success = 'Authenticated as ' + req.body.username
-                    + ' click to <a href="/logout">logout</a>. '
-                    + ' You may now access <a href="/restricted">/restricted</a>.';
-                res.redirect('/profile/' + user.name);
-            });
-        } else {
-            console.log('Authentication failed');
-            req.session.error = 'Authentication failed, please check your '
-                + ' username and password.';
-            res.redirect('login');
-        }
-    });
-});
 
 //Adduser function for signup
 function addUser(usr, pss) {
@@ -175,22 +181,76 @@ function addUser(usr, pss) {
  / TODO: Replace with real database (DevelopAlexKaran has real MongoLAB setup)
  */////////////////////
 
-//backend
-
-var backend = require('./backend');
-//console.log(backend.coolfunction());
-
-// views is directory for all template files
-//config
-app.set('views', __dirname + '/views');
-app.set('view engine', 'ejs');
-
-app.get('/', function (request, response) {
-    response.render('login');
+app.get('/', function (req, res) {
+    res.render('login');
 });
 
-app.get(/testing\/(.*)/, function (request, response) {
-    var name = request.params[0];
+app.get(/\/profile\/(.*)/, function (req, res) {
+    var name = req.params[0];
+    var user = backend.getUser(name);
+
+    //if(user.name = req.session.username) {
+
+    console.log("THE SORT IS" + req.query.sort);
+
+    if (user) {
+
+        if (req.session.username === name) {
+            res.render('pages/ownProfile', {user: user, sort:backend.sorts.get(req.query.sort)});
+        }
+    
+        else {
+
+            //     for (friend of user.friends)
+            //     {
+            //         console.log("this is a friend: " + friend.name);
+            //     }
+            res.render('pages/profile', {user: user, sort:backend.sorts.get(req.query.sort)});
+        }
+    }
+    else {
+        res.send("User '" + name + "' doesn't exist!");
+    }
+
+});
+
+app.get('/makeMark', function (req, res) {
+    res.render('pages/makeMark');
+});
+
+app.post('/makeMark', function (req, res) {
+    var name = req.body.name;
+    var url = req.body.url;
+    console.log("the name is " + name);
+    console.log("the url is " + url);
+
+    var user = backend.getUser(req.session.username);
+
+    console.log("the user is " + user.name);
+    user.addMark(name, user, url, null); //TODO if the mark does not have http:// or some other protocol then we need to add it or it breaks
+    res.redirect('/profile/' + user.name);
+});
+
+app.get('/followUser', function(req, res) {
+    res.render('pages/followUser');
+});
+
+app.post('/followUser', function (req, res) {
+    var thisUser = backend.getUser(req.session.username);
+    var userToFollow = backend.getUser(req.body.name);
+    if(userToFollow) {
+        thisUser.addFriend(userToFollow);
+    }
+    //TODO else fail more nicely
+    res.redirect('/profile/' + thisUser.name);
+});
+
+
+///TESTING AND EXAMPLES
+///BELOW THIS LINE
+
+app.get(/testing\/(.*)/, function (req, res) {
+    var name = req.params[0];
 
     console.log("\n");
     backend.addUser(name);
@@ -215,124 +275,91 @@ app.get(/testing\/(.*)/, function (request, response) {
     console.log("\nTag added!");
     console.log(backend.getUser(name).getTag("Test tag").getMark("Mark"));
 
-    response.send(name + ' group created! Please see console for further output. <br> <br> Check these out! <br> <a href="/profile/Xander">User1</a> <br> <a href="/profile/' + name + '">User2</a>');
+    res.send(name + ' group created! Please see console for further output. <br> <br> Check these out! <br> <a href="/profile/Xander">User1</a> <br> <a href="/profile/' + name + '">User2</a>');
 });
 
-app.post(/testMarks\/(.*)/, function (request, response) {
-    var name = request.params[0];
+app.post(/testMarks\/(.*)/, function (req, res) {
+    var name = req.params[0];
     var owner = "Sterling";
     var url = "www.google.com";
     var privacy = 0;
     backend.addMark(name, owner, url, privacy);
-    response.send("worked so far. lets try printing to console!");
+    res.send("worked so far. lets try printing to console!");
     //backend.mark.displayMark();
 });
 
-app.get(/\/profile\/(.*)/, function (request, response) {
-    var name = request.params[0];
-
-
-    backend.addUser(name);
-    var user = backend.getUser(name);
-
-    //if(user.name = request.session.user) {
-
-    if (user) {
-
-        backend.addUser("john doe");
-        backend.addUser("jane doe");
-        user.addFriend(backend.getUser("john doe"));
-        user.addFriend(backend.getUser("jane doe"));
-
-        if (request.session.user) {
-            console.log("the user is: " + request.session.user.name);
-
-            if (request.session.user.name === name) {
-                response.render('pages/ownProfile', {user: user});
-            }
-        }
-        else {
-
-            //     for (friend of user.friends
-            // )
-            //     {
-            //         console.log("this is a friend: " + friend.name);
-            //     }
-            response.render('pages/profile', {user: user});
-        }
-    }
-    else {
-        response.send("User '" + user + "' doesn't exist!");
-    }
-
-});
-
-app.get('/makeMark', function (request, response) {
-    response.render('pages/makeMark');
-});
-
-app.get('/test', function (request, response) {
+app.get('/test', function (req, res) {
     console.log("test");
-    response.send('<a href="/link"> Go to that cool page</a>');
+    res.send('<a href="/link"> Go to that cool page</a>');
 });
 
-app.get('/link', function (request, response) {
-    response.send('Tada! You went to that page');
+app.get('/link', function (req, res) {
+    res.send('Tada! You went to that page');
 });
 
-// app.get('/db', function(request,response) {
-// 	pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-// 		client.query('SELECT * FROM test_table', function(err, result){
-// 			done();
-// 			if(err)
-// 				{console.error(err); response.send("Error "+err);}
-// 			else
-// 				{response.render('pages/db', {results: result.rows});}
-// 		});
-// 	});
+// app.get('/db', function(req,res) {
+//  pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+//      client.query('SELECT * FROM test_table', function(err, result){
+//          done();
+//          if(err)
+//              {console.error(err); res.send("Error "+err);}
+//          else
+//              {res.render('pages/db', {results: result.rows});}
+//      });
+//  });
 // });
 
-app.post('/makeMark', function (request, response) {
-    var name = request.body.name;
-    var url = request.body.url;
-    console.log("the name is " + name);
-    console.log("the url is " + url);
 
-    var user = request.session.user;
-    console.log(user);
-
-    console.log("the user is " + user.name);
-    backend.getUser(user.name).addMark(name, user, url, null); //I DON'T KNOW WHY THIS WORKS but user.addMark(...) doesn't
-    // user.addFriend(null);
-    // user.addMark(name, user, url, null);
-    response.redirect('/profile/' + user.name);
-});
-
-// app.get('/addMark/:name/:url', function(request, response) {
-//     var name = request.params.name;
-//     var url = request.params.url;
+// app.get('/addMark/:name/:url', function(req, res) {
+//     var name = req.params.name;
+//     var url = req.params.url;
 //     console.log("the name is " + name);
 //     console.log("the url is " + url);
 
-//     var user = request.session.user;
+//     var user = req.session.user;
 //     console.log(user);
 
 //     console.log("the user is " + user.name);
 //     backend.getUser(user.name).addMark(name, user, url, null); //I DON'T KNOW WHY THIS WORKS but user.addMark(...) doesn't
 //     // user.addFriend(null);
 //     // user.addMark(name, user, url, null);
-//     response.send("done");
+//     res.send("done");
 // });
 
-// app.post(/.*/, function (request, response) {
-//     console.log("thing is:" + request.originalUrl);
+// app.post(/.*/, function (req, res) {
+//     console.log("thing is:" + req.originalUrl);
 // });
 
 app.listen(app.get('port'), function () {
     console.log('Node app is running on port', app.get('port'));
-    // addUser('karan', 'shukla');
 });
 
-app.get('/pages/newmark', function (request, response) {
-    response.send("time to ask for help");
+app.get('/init', function (req, res) {
+    backend.addUser('milo', 'pass');
+    backend.addUser('alex');
+    backend.addUser('krystal');
+    backend.addUser('xander');
+    var milo = backend.getUser('milo');
+    milo.addMark('aa', milo, "www.google.com");
+    milo.addMark('zz', milo, "www.google.com");
+    milo.addMark('bb', milo, "www.google.com");
+    milo.addMark('yy', milo, "www.google.com");
+    authent('milo', 'pass', function (err, user) {
+        if (user) {
+            console.log('authenticate');
+            req.session.regenerate(function () {
+                // Store username as session user
+                req.session.username = user.name;
+                req.session.success = 'Authenticated as ' + req.body.username;
+                +' click to <a href="/logout">logout</a>. '
+                + ' You may now access <a href="/restricted">/restricted</a>.';
+                res.redirect('/profile/' + user.name);
+            });
+        } else {
+            console.log('Authentication failed');
+            req.session.error = 'Authentication failed, please check your '
+                + ' username and password.';
+            res.redirect('login');
+        }
+    });
 });
