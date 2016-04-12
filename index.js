@@ -70,7 +70,7 @@ app.post('/login', function (req, res) {
                 req.session.success = 'Authenticated as ' + req.body.username;
                 +' click to <a href="/logout">logout</a>. '
                 + ' You may now access <a href="/restricted">/restricted</a>.';
-                res.redirect('/profile/' + user.name);
+                res.redirect('/feed/' + user.name);
             });
         } else {
             console.log('Authentication failed');
@@ -185,6 +185,20 @@ app.get('/', function (req, res) {
     res.render('login');
 });
 
+/*app.get('/profile', function (req, res) {    
+    var user = backend.getUser(req.session.username);
+
+    if (user) {
+
+        res.render('pages/' + user.name);            
+        
+    }
+    else {
+        res.redirect('signup');
+    }
+
+}); */
+
 app.get(/\/profile\/(.*)/, function (req, res) {
     var name = req.params[0];
     var user = backend.getUser(name);
@@ -210,6 +224,20 @@ app.get(/\/profile\/(.*)/, function (req, res) {
     }
     else {
         res.send("User '" + name + "' doesn't exist!");
+    }
+
+});
+
+app.get('/feed', function (req, res) {
+    var user = backend.getUser(req.session.username);     
+
+    if (user) {
+       
+        res.render('pages/feed', {user: user, sort:backend.sorts.get()});        
+        
+    }
+    else {
+        res.redirect('signup');
     }
 
 });
@@ -340,10 +368,17 @@ app.get('/init', function (req, res) {
     backend.addUser('krystal');
     backend.addUser('xander');
     var milo = backend.getUser('milo');
-    milo.addMark('aa', milo, "www.google.com");
-    milo.addMark('zz', milo, "www.google.com");
-    milo.addMark('bb', milo, "www.google.com");
-    milo.addMark('yy', milo, "www.google.com");
+	var krystal = backend.getUser('krystal');
+	var alex = backend.getUser('alex');
+    milo.addMark('google', milo, "www.google.com");
+    milo.addMark('bing', milo, "www.bing.com");
+    alex.addMark('yahoo', alex, "www.yahoo.com");
+    alex.addMark('elearning', alex, "www.elearning.utdallas.edu");
+	krystal.addMark('stackoverflow', krystal, "http://stackoverflow.com/questions/7042340/node-js-error-cant-set-headers-after-they-are-sent");
+	krystal.addMark('cats', krystal, "https://www.google.com/search?q=cats&rlz=1C1CHFX_enUS568US568&oq=cats&aqs=chrome..69i57j0l5.4487j0j4&sourceid=chrome&ie=UTF-8");
+	milo.addFriend(krystal);
+	milo.addFriend(alex);
+	
     authent('milo', 'pass', function (err, user) {
         if (user) {
             console.log('authenticate');
