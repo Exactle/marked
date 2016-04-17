@@ -62,7 +62,7 @@ exports.sorts.set("url", function(a,b) {
 });
 
 exports.sorts.set("checks", function(a,b) {
-	return 0; //TODO
+	return a.checks.length;
 });
 
 exports.sorts.set("clicks", function(a,b) {
