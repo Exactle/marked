@@ -11,7 +11,13 @@
 
 <!-- <div id="startText"> wow this is some text lol </div> -->
 
-    <p> User: <b> <%= user.name %> </b> </p>
+	
+	<p> <a href="/profile/<%=user.name%>">Go to profile!</a></p>
+	<p> <a href="/logout">Logout</a></p>
+	
+    <p> User: <b> <%= user.name %> </b> </p>	
+	
+	
     <p> Followed Marks: <br> 
 
 	<% for (friend of user.friends.values()) { %>
@@ -19,9 +25,7 @@
 			<a href="<%= mark.url %>"> <%= mark.name %></a> <br>
 		<% } %>
     <% } %>
-	
-	<p> <a href="/profile/<%=user.name%>">Go to profile!</a></p>
-	<p> <a href="/logout">Logout</a></p>
+
 	
     <!-- stuff here -->
     </p>    
