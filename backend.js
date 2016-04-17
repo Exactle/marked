@@ -5,9 +5,19 @@
 //backend.coolfunction();
 
 var users = new Map();
+var uids = new Map();
+
+function getNewUid(thing) {
+	var uid;
+	do {
+		uid = Math.floor((Math.random() * 100000000));
+	} while(uids.get(uid));
+	uids.set(uid, thing);
+	return uid;
+}
 
 exports.coolfunction = function () {
-    return "what"
+    return "what";
 };
 
 exports.addUser = function (name, password) {
@@ -75,6 +85,8 @@ class User {
 
         //messy
         this.checks = new Map();
+
+        this.uid = getNewUid(this);
     }
 
     addFriend(user) {
@@ -91,7 +103,7 @@ class User {
 
     addMark(name, owner, url, privacy) {
     	if(!url.includes("//"))
-    		url = "http://" + u;
+    		url = "http://" + url;
         this.marks.set(name, new Mark(name, owner, url, privacy));
     }
 
@@ -203,6 +215,8 @@ class Mark {
 
         //checks are messy
         this.checks = new Array();
+
+        this.uid = getNewUid(this);
     }
 
     displayMark() {

@@ -255,7 +255,7 @@ app.post('/makeMark', function (req, res) {
     var user = backend.getUser(req.session.username);
 
     console.log("the user is " + user.name);
-    user.addMark(name, user, url, null); //TODO if the mark does not have http:// or some other protocol then we need to add it or it breaks
+    user.addMark(name, user, url);
     res.redirect('/profile/' + user.name);
 });
 
@@ -266,7 +266,7 @@ app.get('/followUser', function(req, res) {
 app.post('/followUser', function (req, res) {
     var thisUser = backend.getUser(req.session.username);
     var userToFollow = backend.getUser(req.body.name);
-    if(userToFollow) {
+    if(userToFollow && userToFollow != req.session.username) {
         thisUser.addFriend(userToFollow);
     }
     //TODO else fail more nicely
