@@ -187,10 +187,13 @@ app.get('/', function (req, res) {
 
 /*app.get('/profile', function (req, res) {    
     var user = backend.getUser(req.session.username);
+	
+	console.log("Basic profile page");
+	console.log("Extension is " + req.params[0]);
 
     if (user) {
-
-        res.render('pages/' + user.name);            
+		
+		res.redirect('pages/' + req.session.username);            
         
     }
     else {
@@ -203,16 +206,15 @@ app.get(/\/profile\/(.*)/, function (req, res) {
     var name = req.params[0];
     var user = backend.getUser(name);
 
-    //if(user.name = req.session.username) {
-
     console.log("THE SORT IS" + req.query.sort);
+	console.log("The session name is " + req.session.username);
+	console.log("The extension is " + name)
 
     if (user) {
 
         if (req.session.username === name) {
             res.render('pages/ownProfile', {user: user, sort:backend.sorts.get(req.query.sort)});
-        }
-    
+        }		    
         else {
 
             //     for (friend of user.friends)
@@ -222,6 +224,9 @@ app.get(/\/profile\/(.*)/, function (req, res) {
             res.render('pages/profile', {user: user, sort:backend.sorts.get(req.query.sort)});
         }
     }
+	else if(!name){		
+		res.render('pages/ownProfile', {user: backend.getUser(req.session.username), sort:backend.sorts.get(req.query.sort)});
+	}
     else {
         res.send("User '" + name + "' doesn't exist!");
     }
