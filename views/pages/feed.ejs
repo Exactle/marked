@@ -22,16 +22,14 @@
 
 	<% for (friend of user.friends.values()) { %>
 		<% for (mark of friend.getMarks(sort)) { %>			
-			<a href= <%= mark.url %>> <%= mark.name %></a>			
-			
-			
-			<div id= <%=mark.uid%>> <%= mark.checkCount%></div>
+			<a href= <%= mark.url %>> <%= mark.name %></a>	
+			<span id= <%=mark.uid%>> Checks: <%= mark.checkCount%></span> <br>
 				
 			<script>								
 									
 				document.getElementById(<%=mark.uid%>).addEventListener("click", function( event ) {
 					<%= mark.addCheck(user); %>
-					event.target.innerHTML = <%= mark.checkCount %>;
+					event.target.innerHTML = "Checks: " + <%= mark.checkCount %>;
 				}, false);
 						
 							

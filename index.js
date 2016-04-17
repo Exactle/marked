@@ -383,7 +383,7 @@ app.get('/init', function (req, res) {
 	krystal.addMark('cats', krystal, "https://www.google.com/search?q=cats&rlz=1C1CHFX_enUS568US568&oq=cats&aqs=chrome..69i57j0l5.4487j0j4&sourceid=chrome&ie=UTF-8");
 	milo.addFriend(krystal);
 	milo.addFriend(alex);
-	backend.getUser(krystal.name).getMark('stackoverflow').addCheck(milo);
+	backend.getUser(krystal.name).getMark('stackoverflow').addCheck(krystal);
 	console.log(backend.getUser(krystal.name).getMark('stackoverflow').checkCount);
 	
     authent('milo', 'pass', function (err, user) {
