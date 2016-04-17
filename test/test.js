@@ -14,6 +14,8 @@ var should = chai.should();
 // })
 
 describe('Backend: Users', function() {
+	// require('blanket') ({"pattern":"backend.js"});
+
 	var backend = require('../backend');
 
 	it('should allow us to create a user with any name', function() {
