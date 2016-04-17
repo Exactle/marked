@@ -84,7 +84,7 @@ class User {
         this.password = password;
 
         //messy
-        this.checks = new Map();
+        this.checks = new Array();
 
         this.uid = getNewUid(this);
     }
@@ -210,8 +210,9 @@ class Mark {
         this.name = name;
         this.owner = owner;
         this.url = url;
-        this.tags = new Map();
+        this.tags = new Map();		
         this.privacy = privacy;
+		this.checkCount = 0;
 
         //checks are messy
         this.checks = new Array();
@@ -231,7 +232,11 @@ class Mark {
     }
 
     addCheck(checkingUser) {
-    	checks.add(checkingUser);
-    	user.checks.push(this);
+		if(this.checks.indexOf(checkingUser.uid) < 0)
+		{
+			this.checks.push(checkingUser.uid);
+			checkingUser.checks.push(this.uid);
+			this.checkCount++;
+		}		    	
     }
 }

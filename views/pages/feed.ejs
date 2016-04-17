@@ -21,11 +21,27 @@
     <p> Followed Marks: <br> 
 
 	<% for (friend of user.friends.values()) { %>
-		<% for (mark of friend.getMarks(sort)) { %>
-			<a href="<%= mark.url %>"> <%= mark.name %></a> <br>
+		<% for (mark of friend.getMarks(sort)) { %>			
+			<a href= <%= mark.url %>> <%= mark.name %></a>			
+			
+			
+			<div id= <%=mark.uid%>> <%= mark.checkCount%></div>
+				
+			<script>								
+									
+				document.getElementById(<%=mark.uid%>).addEventListener("click", function( event ) {
+					<%= mark.addCheck(user); %>
+					event.target.innerHTML = <%= mark.checkCount %>;
+				}, false);
+						
+							
+			</script>
+						
 		<% } %>
     <% } %>
-
+	
+	
+	
 	
     <!-- stuff here -->
     </p>    
