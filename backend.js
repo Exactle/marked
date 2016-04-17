@@ -12,14 +12,14 @@ exports.coolfunction = function () {
 
 exports.addUser = function (name, password) {
     if (users.get(name)) {
-        console.log("User already exists!");
+        //console.log("User already exists!");
         return exports.getUser(name);
     }
     if (!users.get(name)) {
         var added = new User(name, password); //we should check for if the user already exists
         users.set(name, added);
 
-        console.log("User " + name + " created!");
+        //console.log("User " + name + " created!");
     }
 
     return added;
@@ -34,7 +34,7 @@ exports.removeUser = function (name) {
     users.delete(name);
 
     //maybe return some value here?
-    console.log("User " + name + " removed!");
+    //console.log("User " + name + " removed!");
 };
 
 exports.sorts = new Map();
@@ -138,7 +138,7 @@ class User {
     	}
     	marks = marks.sort(optionalSort);
 
-    	console.log("GETMARKS we got the marks");
+    	//console.log("GETMARKS we got the marks");
 
     	return marks;
     }
@@ -206,10 +206,10 @@ class Mark {
     }
 
     displayMark() {
-        console.log("Mark Name: " + name);
-        console.log("Mark Owner: " + owner);
-        console.log("Mark URL: " + url);
-        console.log("Mark Privacy: " + privacy);
+        //console.log("Mark Name: " + name);
+        //console.log("Mark Owner: " + owner);
+        //console.log("Mark URL: " + url);
+        //console.log("Mark Privacy: " + privacy);
     }
 
     addTag(tag) {
