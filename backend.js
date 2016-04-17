@@ -90,6 +90,8 @@ class User {
     }
 
     addMark(name, owner, url, privacy) {
+    	if(!url.includes("//"))
+    		url = "http://" + u;
         this.marks.set(name, new Mark(name, owner, url, privacy));
     }
 
