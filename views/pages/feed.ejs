@@ -7,7 +7,7 @@
 
 </head>
 
-<body>
+<body>	
 	
 	<p> <a href="/profile/<%=user.name%>">Go to profile!</a></p>
 	<p> <a href="/logout">Logout</a></p>
@@ -22,7 +22,7 @@
 			<a href= <%= mark.url %>> <%= mark.name %></a> <br>
 			
 			<span id="<%=mark.name%>"> Checks: <%= mark.checkCount%></span> <br>
-			<span id="<%=mark.uid%>"> Steal </span> <br> <br>
+			<span id="<%=mark.uid%>"> reMark </span> <br> <br>
 
 			<script>
 
@@ -30,20 +30,28 @@
 			function stealFunction()
 			{
 				var xhttp = new XMLHttpRequest();
+				xhttp.onreadystatechange = function() { 
+				if(xhttp.readyState == 4 && xhttp.status == 200){
+					document.getElementById('<%=mark.uid%>').innerHTML = xhttp.responseText;
+				}
+			};
 				xhttp.open("POST", "/stealMark", true);
 				xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-				xhttp.send('uid=<%=mark.uid%>');
-				event.target.innerHTML = " Stolen";
+				xhttp.send('uid=<%=mark.uid%>');				
 				
 			}
 			
 			function checkFunction()
 			{
 				var xhttp = new XMLHttpRequest();
+				xhttp.onreadystatechange = function() { 
+					if(xhttp.readyState == 4 && xhttp.status == 200){
+						document.getElementById('<%=mark.name%>').innerHTML = xhttp.responseText;
+					}
+				};
 				xhttp.open("POST", "/checkMark", true);
 				xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-				xhttp.send('uid=<%=mark.uid%>');
-				event.target.innerHTML = "Checked";
+				xhttp.send('uid=<%=mark.uid%>');				
 			
 			}
 

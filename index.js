@@ -282,15 +282,26 @@ app.post('/makeMark', function (req, res) {
 app.post('/stealMark', function (req, res) {
     var markUid = req.body.uid;
     var username = req.session.username;
+	
+	if(!backend.getMarkByUid(markUid).stealMark(username)) {
+		res.send("Mark already stolen!");
+	}
+	else{
+		res.send("reMarked!");
+	}
 
-    backend.getMarkByUid(markUid).stealMark(username);
 });
 
 app.post('/checkMark', function (req, res) {
     var markUid = req.body.uid;
     var username = req.session.username;
-
-	backend.getMarkByUid(markUid).checkMark(username);
+	
+	if(!backend.getMarkByUid(markUid).addCheck(username)) {
+		res.send("Mark already checked!");
+	}
+	else{
+		res.send("Checks: " + backend.getMarkByUid(markUid).checkCount);
+	}
 });
 
 app.get('/followUser', function(req, res) {

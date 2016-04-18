@@ -244,7 +244,9 @@ class Mark {
 			checkingUser.checks.push(this.uid);
 			this.checkCount++;
 			console.log(checkingUser.name + " checked " + this.name);
-		}		    	
+			return this.checkCount;
+		}
+		return null;
     }
 	
 	stealMark(thiefName) {
@@ -252,6 +254,8 @@ class Mark {
 		if(!thief.marks.has(this.name)){
 			thief.marks.set(this.name, new Mark(this.name, thief, this.url, this.privacy));
 			console.log(thief.name + " has stolen " + this.name);
+			return thief.marks.get(this.name);
 		}
+		return null;
 	}
 }
