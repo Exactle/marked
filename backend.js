@@ -10,7 +10,7 @@ var uids = new Map();
 function getNewUid(thing) {
 	var uid;
 	do {
-		uid = Math.floor((Math.random() * 100000000));
+		uid = "" + Math.floor((Math.random() * 100000000));
 	} while(uids.get(uid));
 	uids.set(uid, thing);
 	return uid;
@@ -46,6 +46,10 @@ exports.removeUser = function (name) {
     //maybe return some value here?
     //console.log("User " + name + " removed!");
 };
+
+exports.getMarkByUid = function(uid) {
+	return uids.get(uid); //TODO check if it's really a mark
+}
 
 exports.sorts = new Map();
 
@@ -241,7 +245,8 @@ class Mark {
 		}		    	
     }
 	
-	stealMark(thief) {
+	stealMark(thiefName) {
+		var thief = users.get(thiefName);
 		if(!thief.marks.has(this.name)){
 			thief.marks.set(this.name, new Mark(this.name, thief, this.url, this.privacy));
 			console.log(thief.name + " has stolen " + this.name);

@@ -8,9 +8,6 @@
 </head>
 
 <body>
-
-<!-- <div id="startText"> wow this is some text lol </div> -->
-
 	
 	<p> <a href="/profile/<%=user.name%>">Go to profile!</a></p>
 	<p> <a href="/logout">Logout</a></p>
@@ -24,30 +21,36 @@
 		<% for (mark of friend.getMarks(sort)) { %>			
 			<a href= <%= mark.url %>> <%= mark.name %></a> <br>
 			
-			<span id= <%=mark.name%>> Checks: <%= mark.checkCount%></span> <br>
-			<span id= <%=mark.uid%>> Steal </span> <br> <br>
+			<span id="<%=mark.name%>"> Checks: <%= mark.checkCount%></span> <br>
+			<span id="<%=mark.uid%>"> Steal </span> <br> <br>
 
 			<script>
-			document.getElementById(<%=mark.uid%>).addEventListener("click", stealFunction, false);
-			document.getElementById(<%=mark.name%>).addEventListener("click", checkFunction, false);
-				
+
+
 			function stealFunction()
 			{
-				<% if(user.marks.has(mark.name)) { %>
-					event.target.innerHTML = "You already own this Mark";
-				<% } else { %>
-					<% mark.stealMark(user); %>
-					event.target.innerHTML = " Stolen";
-				<% } %>
+				// if(user.marks.has(<%=mark.name%>)) {
+					// event.target.innerHTML = "You already own this Mark";
+				// } else {
+				var xhttp = new XMLHttpRequest();
+				xhttp.open("POST", "/stealMark", true);
+				xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+				xhttp.send('uid=<%=mark.uid%>')
+				// mark.stealMark(<%=user.name%>);
+				event.target.innerHTML = " Stolen";
+				// }
 				
 			}
 			
 			function checkFunction()
 			{
-				<%= mark.addCheck(user); %>
-				event.target.innerHTML = "Checks: " + <%= mark.checkCount %>;
+				// mark.addCheck(<%=user%>);
+				event.target.innerHTML = "Checks: " + mark.checkCount;
 			
 			}
+
+			document.getElementById('<%=mark.uid%>').addEventListener("click", stealFunction, false);
+			document.getElementById('<%=mark.name%>').addEventListener("click", checkFunction, false);
 			</script>
 
 						
