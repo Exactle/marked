@@ -266,8 +266,12 @@ app.post('/makeMark', function (req, res) {
     var user = backend.getUser(req.session.username);
 
     console.log("the user is " + user.name);
-    user.addMark(name, user, url);
-    res.redirect('/profile/' + user.name);
+    if(!user.addMark(name, user, url)) {
+        req.session.error = "Mark already exists!";
+        res.redirect('/makeMark');
+    }
+    else
+        res.redirect('/profile/' + user.name);
 });
 
 app.post('/stealMark', function (req, res) {

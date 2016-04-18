@@ -106,9 +106,14 @@ class User {
     }
 
     addMark(name, owner, url, privacy) {
-    	if(!url.includes("//"))
-    		url = "http://" + url;
-        this.marks.set(name, new Mark(name, owner, url, privacy));
+    	if(this.marks.has(name)) {
+    		return null;
+    	} else {
+	    	if(!url.includes("//"))
+	    		url = "http://" + url;
+	        this.marks.set(name, new Mark(name, owner, url, privacy));
+	        return this.marks.get(name);
+        }
     }
 
     removeMark(mark) {
