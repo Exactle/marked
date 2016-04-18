@@ -263,15 +263,21 @@ app.post('/makeMark', function (req, res) {
     console.log("the name is " + name);
     console.log("the url is " + url);
 
-    var user = backend.getUser(req.session.username);
-
-    console.log("the user is " + user.name);
-    if(!user.addMark(name, user, url)) {
-        req.session.error = "Mark already exists!";
+    if(!name || !url || name === "" || url === "") {
+        req.session.error = "Fields cannot be blank";
         res.redirect('/makeMark');
     }
-    else
-        res.redirect('/profile/' + user.name);
+    else {
+        var user = backend.getUser(req.session.username);
+
+        console.log("the user is " + user.name);
+        if(!user.addMark(name, user, url)) {
+            req.session.error = "Mark already exists!";
+            res.redirect('/makeMark');
+        }
+        else
+            res.redirect('/profile/' + user.name);
+    }
 });
 
 app.post('/stealMark', function (req, res) {
