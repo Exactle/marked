@@ -19,7 +19,7 @@ function getNewUid(thing) {
 exports.addUser = function (name, password) {
     if (users.get(name)) {
         //console.log("User already exists!");
-        return exports.getUser(name);
+        return null;
     }
     if (!users.get(name)) {
         var added = new User(name, password); //we should check for if the user already exists
