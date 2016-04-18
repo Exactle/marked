@@ -229,8 +229,12 @@ app.get(/\/profile\/(.*)/, function (req, res) {
             res.render('pages/profile', {user: user, sort:backend.sorts.get(req.query.sort)});
         }
     }
-	else if(!name){		
-		res.render('pages/ownProfile', {user: backend.getUser(req.session.username), sort:backend.sorts.get(req.query.sort)});
+	else if(!name){
+		if(req.session.username)
+            res.render('pages/ownProfile', {user: backend.getUser(req.session.username), sort:backend.sorts.get(req.query.sort)});
+        else {
+            res.redirect('/signup/');
+        }
 	}
     else {
         res.send("User '" + name + "' doesn't exist!");
