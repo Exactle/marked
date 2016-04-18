@@ -11,14 +11,24 @@
 
 <!-- <div id="startText"> wow this is some text lol </div> -->
 
+	<p> <a href="/profile/">Go to profile!</a></p>
+	<p> <a href="/logout">Logout</a></p>
+	
+	
+
     <p> User profile: <b> <%= user.name %> </b> </p>
     <p> Marks: <br> 
 
-    <% for (mark of user.marks.values()) { %>
+    <% for (mark of user.getMarks(sort)) { %>
       <a href="<%= mark.url %>"> <%= mark.name %></a> <br>
     <% } %>
     <!-- stuff here -->
     </p>
+
+    <p> <a href="?sort=name"> Sort by Mark Name </a> <br>
+     <a href="?sort=url"> Sort by Mark URL </a> <br>
+     <a href="?sort=checks"> Sort by Number of Checks </a> <br>
+     <a href="?sort=username"> Sort by Username </a> </p>
 
     <p> Following: <br>
     <% for (friend of user.friends.values()) { %>

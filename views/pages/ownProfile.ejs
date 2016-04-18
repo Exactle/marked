@@ -12,25 +12,38 @@
 <!-- <div id="startText"> wow this is some text lol </div> -->
 
     This is your own profile!
+	
+	
+	<p> <a href="/makeMark">Make a Mark!</a></p>
+
+    <p> <a href="/followUser">Follow a User!</a></p>
+	
+	<p> <a href="/feed">Go to feed!</a></p>
+
+    <p> <a href="/logout">Logout</a></p>
+	
+	
+	
     
     <p> User profile: <b> <%= user.name %> </b> </p>
     <p> Marks: <br> 
 
-    <% for (mark of user.marks.values()) { %>
-      <a href="<%= mark.url %>"> <%= mark.name %></a> <br>
+    <% for (mark of user.getMarks(sort)) { %>
+      <a href="<%= mark.url %>"> <%= mark.name %></a> | test <br>
     <% } %>
     <!-- stuff here -->
     </p>
+
+    <p> <a href="?sort=name"> Sort by Mark Name </a> <br>
+     <a href="?sort=url"> Sort by Mark URL </a> <br>
+     <a href="?sort=checks"> Sort by Number of Checks </a> <br>
+     <a href="?sort=username"> Sort by Username </a> </p>
 
     <p> Following: <br>
     <% for (friend of user.friends.values()) { %>
       <a href="<%= friend.name %>"> <%= friend.name %></a> <br>
     <% } %>
     </p>
-
-    <p> <a href="/makeMark">Make a Mark!</a></p>
-
-    <p> <a href="/logout">Logout</a></p>
 
 
 </body>

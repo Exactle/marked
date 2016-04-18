@@ -5,21 +5,31 @@
 //backend.coolfunction();
 
 var users = new Map();
+var uids = new Map();
+
+function getNewUid(thing) {
+	var uid;
+	do {
+		uid = Math.floor((Math.random() * 100000000));
+	} while(uids.get(uid));
+	uids.set(uid, thing);
+	return uid;
+}
 
 exports.coolfunction = function () {
-    return "what"
+    return "what";
 };
 
 exports.addUser = function (name, password) {
     if (users.get(name)) {
-        console.log("User already exists!");
+        //console.log("User already exists!");
         return exports.getUser(name);
     }
     if (!users.get(name)) {
         var added = new User(name, password); //we should check for if the user already exists
         users.set(name, added);
 
-        console.log("User " + name + " created!");
+        //console.log("User " + name + " created!");
     }
 
     return added;
@@ -34,9 +44,34 @@ exports.removeUser = function (name) {
     users.delete(name);
 
     //maybe return some value here?
-    console.log("User " + name + " removed!");
+    //console.log("User " + name + " removed!");
 };
 
+exports.sorts = new Map();
+
+exports.sorts.set("name", function(a, b) {
+	return a.name.localeCompare(b.name);
+});
+
+exports.sorts.set("username", function(a,b) {
+	return a.owner.name.localeCompare(b.owner.name); //check
+});
+
+exports.sorts.set("url", function(a,b) {
+	return a.url.localeCompare(b.url); //check
+});
+
+exports.sorts.set("checks", function(a,b) {
+	return a.checks.length;
+});
+
+exports.sorts.set("clicks", function(a,b) {
+	return 0; //TODO
+});
+
+exports.sorts.set("tags", function(a,b) {
+	return 0; //TODO
+});
 
 class User {
 
@@ -47,6 +82,11 @@ class User {
         this.marks = new Map();
         this.tags = new Map();
         this.password = password;
+
+        //messy
+        this.checks = new Array();
+
+        this.uid = getNewUid(this);
     }
 
     addFriend(user) {
@@ -62,6 +102,8 @@ class User {
     }
 
     addMark(name, owner, url, privacy) {
+    	if(!url.includes("//"))
+    		url = "http://" + url;
         this.marks.set(name, new Mark(name, owner, url, privacy));
     }
 
@@ -95,6 +137,22 @@ class User {
 
     getGroup(name) {
         return this.groups.get(name);
+    }
+
+    getMarks(optionalSort) {
+    	if(!optionalSort) {
+    		optionalSort = exports.sortByName;
+    	}
+
+    	var marks = new Array();
+    	for(let marko of this.marks.values()) {
+    		marks.push(marko);
+    	}
+    	marks = marks.sort(optionalSort);
+
+    	//console.log("GETMARKS we got the marks");
+
+    	return marks;
     }
 
 }
@@ -146,22 +204,39 @@ class Tag {
 
 class Mark {
     constructor(name, owner, url, privacy) {
+    	if(!owner) {
+    		console.trace();
+    	}
         this.name = name;
         this.owner = owner;
         this.url = url;
-        this.tags = new Map();
+        this.tags = new Map();		
         this.privacy = privacy;
+		this.checkCount = 0;
+
+        //checks are messy
+        this.checks = new Array();
+
+        this.uid = getNewUid(this);
     }
 
     displayMark() {
-        console.log("Mark Name: " + name);
-        console.log("Mark Owner: " + owner);
-        console.log("Mark URL: " + url);
-        console.log("Mark Privacy: " + privacy);
+        //console.log("Mark Name: " + name);
+        //console.log("Mark Owner: " + owner);
+        //console.log("Mark URL: " + url);
+        //console.log("Mark Privacy: " + privacy);
     }
 
     addTag(tag) {
         this.tags.set(tag, tag);
     }
 
+    addCheck(checkingUser) {
+		if(this.checks.indexOf(checkingUser.uid) < 0)
+		{
+			this.checks.push(checkingUser.uid);
+			checkingUser.checks.push(this.uid);
+			this.checkCount++;
+		}		    	
+    }
 }
