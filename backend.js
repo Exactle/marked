@@ -10,26 +10,22 @@ var uids = new Map();
 function getNewUid(thing) {
 	var uid;
 	do {
-		uid = Math.floor((Math.random() * 100000000));
+		uid = "" + Math.floor((Math.random() * 100000000));
 	} while(uids.get(uid));
 	uids.set(uid, thing);
 	return uid;
 }
 
-exports.coolfunction = function () {
-    return "what";
-};
-
 exports.addUser = function (name, password) {
     if (users.get(name)) {
-        console.log("User already exists!");
-        return exports.getUser(name);
+        //console.log("User already exists!");
+        return null;
     }
     if (!users.get(name)) {
         var added = new User(name, password); //we should check for if the user already exists
         users.set(name, added);
 
-        console.log("User " + name + " created!");
+        //console.log("User " + name + " created!");
     }
 
     return added;
@@ -44,8 +40,12 @@ exports.removeUser = function (name) {
     users.delete(name);
 
     //maybe return some value here?
-    console.log("User " + name + " removed!");
+    //console.log("User " + name + " removed!");
 };
+
+exports.getMarkByUid = function(uid) {
+	return uids.get(uid); //TODO check if it's really a mark
+}
 
 exports.sorts = new Map();
 
@@ -62,16 +62,16 @@ exports.sorts.set("url", function(a,b) {
 });
 
 exports.sorts.set("checks", function(a,b) {
-	return 0; //TODO
+	return -a.checks.length; //negative to sort the other way
 });
 
-exports.sorts.set("clicks", function(a,b) {
-	return 0; //TODO
-});
+// exports.sorts.set("clicks", function(a,b) {
+// 	return 0; //TODO
+// });
 
-exports.sorts.set("tags", function(a,b) {
-	return 0; //TODO
-});
+// exports.sorts.set("tags", function(a,b) {
+// 	return 0; //TODO
+// });
 
 class User {
 
@@ -84,7 +84,7 @@ class User {
         this.password = password;
 
         //messy
-        this.checks = new Map();
+        this.checks = new Array();
 
         this.uid = getNewUid(this);
     }
@@ -102,9 +102,14 @@ class User {
     }
 
     addMark(name, owner, url, privacy) {
-    	if(!url.includes("//"))
-    		url = "http://" + url;
-        this.marks.set(name, new Mark(name, owner, url, privacy));
+    	if(this.marks.has(name)) {
+    		return null;
+    	} else {
+	    	if(!url.includes("//"))
+	    		url = "http://" + url;
+	        this.marks.set(name, new Mark(name, owner, url, privacy));
+	        return this.marks.get(name);
+        }
     }
 
     removeMark(mark) {
@@ -150,7 +155,7 @@ class User {
     	}
     	marks = marks.sort(optionalSort);
 
-    	console.log("GETMARKS we got the marks");
+    	//console.log("GETMARKS we got the marks");
 
     	return marks;
     }
@@ -210,8 +215,9 @@ class Mark {
         this.name = name;
         this.owner = owner;
         this.url = url;
-        this.tags = new Map();
+        this.tags = new Map();		
         this.privacy = privacy;
+		this.checkCount = 0;
 
         //checks are messy
         this.checks = new Array();
@@ -220,18 +226,36 @@ class Mark {
     }
 
     displayMark() {
-        console.log("Mark Name: " + name);
-        console.log("Mark Owner: " + owner);
-        console.log("Mark URL: " + url);
-        console.log("Mark Privacy: " + privacy);
+        //console.log("Mark Name: " + name);
+        //console.log("Mark Owner: " + owner);
+        //console.log("Mark URL: " + url);
+        //console.log("Mark Privacy: " + privacy);
     }
 
     addTag(tag) {
         this.tags.set(tag, tag);
     }
 
-    addCheck(checkingUser) {
-    	checks.add(checkingUser);
-    	user.checks.push(this);
+    addCheck(checkingUserName) {
+		var checkingUser = users.get(checkingUserName);
+		if(this.checks.indexOf(checkingUser.uid) < 0)
+		{
+			this.checks.push(checkingUser.uid);
+			checkingUser.checks.push(this.uid);
+			this.checkCount++;
+			console.log(checkingUser.name + " checked " + this.name);
+			return this.checkCount;
+		}
+		return null;
     }
+	
+	stealMark(thiefName) {
+		var thief = users.get(thiefName);
+		if(!thief.marks.has(this.name)){
+			thief.marks.set(this.name, new Mark(this.name, thief, this.url, this.privacy));
+			console.log(thief.name + " has stolen " + this.name);
+			return thief.marks.get(this.name);
+		}
+		return null;
+	}
 }

@@ -67,10 +67,9 @@ app.post('/login', function (req, res) {
             req.session.regenerate(function () {
                 // Store username as session user
                 req.session.username = user.name;
-                req.session.success = 'Authenticated as ' + req.body.username;
                 +' click to <a href="/logout">logout</a>. '
                 + ' You may now access <a href="/restricted">/restricted</a>.';
-                res.redirect('/profile/' + user.name);
+                res.redirect('/feed');
             });
         } else {
             console.log('Authentication failed');
@@ -87,27 +86,32 @@ app.get('/signup', function (req, res) {
 });
 
 app.post('/signup', function (req, res) {
-    addUser(req.body.username, req.body.password);
-    console.log('user added');
-    console.log('thats another authent');
-    authent(req.body.username, req.body.password, function (err, user) {
-        if (user) {
-            console.log('authenticate');
-            req.session.regenerate(function () {
-                //Store session user as user/display username
-                req.session.username = user.name;
-                req.session.success = 'Authenticated as ' + req.body.username
-                    + ' click to <a href="/logout">logout</a>. '
-                    + ' You may now access <a href="/restricted">/restricted</a>.';
-                res.redirect('/profile/' + user.name);
-            });
-        } else {
-            console.log('Authentication failed');
-            req.session.error = 'Authentication failed, please check your '
-                + ' username and password.';
-            res.redirect('login');
-        }
-    });
+    if(!addUser(req.body.username, req.body.password)) {
+        console.log('Authentication failed');
+        req.session.error = 'User already exists.';
+        res.redirect('signup');
+    }
+    else {
+        console.log('user added');
+        console.log('thats another authent');
+        authent(req.body.username, req.body.password, function (err, user) {
+            if (user) {
+                console.log('authenticate');
+                req.session.regenerate(function () {
+                    //Store session user as user/display username
+                    req.session.username = user.name;
+                    req.session.success = 'Authenticated as ' + req.body.username
+                        + ' click to <a href="/logout">logout</a>. '
+                        + ' You may now access <a href="/restricted">/restricted</a>.';
+                    res.redirect('/profile/' + user.name);
+                });
+            } else {
+                console.log('Authentication failed');
+                req.session.error = 'Authentication failed, please check your '
+                    + ' username and password.';
+                res.redirect('login');
+            }
+    });}
 });
 
 /*////////////////////
@@ -161,10 +165,11 @@ function restrict(req, res, next) {
 function addUser(usr, pss) {
     if (backend.getUser(usr)) {
         console.log("USER ALREADY EXISTS");
+        return null;
     }
     else {
         console.log("123 " + pss);
-        backend.addUser(usr, pss);
+        return backend.addUser(usr, pss);
 
         // hash(pss, function(err, salt, hash){
         // if (err) throw err;
@@ -185,20 +190,36 @@ app.get('/', function (req, res) {
     res.render('login');
 });
 
+/*app.get('/profile', function (req, res) {    
+    var user = backend.getUser(req.session.username);
+	
+	console.log("Basic profile page");
+	console.log("Extension is " + req.params[0]);
+
+    if (user) {
+		
+		res.redirect('pages/' + req.session.username);            
+        
+    }
+    else {
+        res.redirect('signup');
+    }
+
+}); */
+
 app.get(/\/profile\/(.*)/, function (req, res) {
     var name = req.params[0];
     var user = backend.getUser(name);
 
-    //if(user.name = req.session.username) {
-
     console.log("THE SORT IS" + req.query.sort);
+	console.log("The session name is " + req.session.username);
+	console.log("The extension is " + name)
 
     if (user) {
 
         if (req.session.username === name) {
             res.render('pages/ownProfile', {user: user, sort:backend.sorts.get(req.query.sort)});
-        }
-    
+        }		    
         else {
 
             //     for (friend of user.friends)
@@ -208,8 +229,25 @@ app.get(/\/profile\/(.*)/, function (req, res) {
             res.render('pages/profile', {user: user, sort:backend.sorts.get(req.query.sort)});
         }
     }
+	else if(!name){		
+		res.render('pages/ownProfile', {user: backend.getUser(req.session.username), sort:backend.sorts.get(req.query.sort)});
+	}
     else {
         res.send("User '" + name + "' doesn't exist!");
+    }
+
+});
+
+app.get('/feed', function (req, res) {
+    var user = backend.getUser(req.session.username);     
+
+    if (user) {
+       
+        res.render('pages/feed', {user: user, sort:backend.sorts.get()});        
+        
+    }
+    else {
+        res.redirect('signup');
     }
 
 });
@@ -224,11 +262,46 @@ app.post('/makeMark', function (req, res) {
     console.log("the name is " + name);
     console.log("the url is " + url);
 
-    var user = backend.getUser(req.session.username);
+    if(!name || !url || name === "" || url === "") {
+        req.session.error = "Fields cannot be blank";
+        res.redirect('/makeMark');
+    }
+    else {
+        var user = backend.getUser(req.session.username);
 
-    console.log("the user is " + user.name);
-    user.addMark(name, user, url);
-    res.redirect('/profile/' + user.name);
+        console.log("the user is " + user.name);
+        if(!user.addMark(name, user, url)) {
+            req.session.error = "Mark already exists!";
+            res.redirect('/makeMark');
+        }
+        else
+            res.redirect('/profile/' + user.name);
+    }
+});
+
+app.post('/stealMark', function (req, res) {
+    var markUid = req.body.uid;
+    var username = req.session.username;
+	
+	if(!backend.getMarkByUid(markUid).stealMark(username)) {
+		res.send("Mark already stolen!");
+	}
+	else{
+		res.send("reMarked!");
+	}
+
+});
+
+app.post('/checkMark', function (req, res) {
+    var markUid = req.body.uid;
+    var username = req.session.username;
+	
+	if(!backend.getMarkByUid(markUid).addCheck(username)) {
+		res.send("Mark already checked!");
+	}
+	else{
+		res.send("Checks: " + backend.getMarkByUid(markUid).checkCount);
+	}
 });
 
 app.get('/followUser', function(req, res) {
@@ -340,17 +413,25 @@ app.get('/init', function (req, res) {
     backend.addUser('krystal');
     backend.addUser('xander');
     var milo = backend.getUser('milo');
-    milo.addMark('aa', milo, "www.google.com");
-    milo.addMark('zz', milo, "www.google.com");
-    milo.addMark('bb', milo, "www.google.com");
-    milo.addMark('yy', milo, "www.google.com");
+	var krystal = backend.getUser('krystal');
+	var alex = backend.getUser('alex');
+    milo.addMark('google', milo, "www.google.com");
+    milo.addMark('bing', milo, "www.bing.com");
+    alex.addMark('yahoo', alex, "www.yahoo.com");
+    alex.addMark('elearning', alex, "www.elearning.utdallas.edu");
+	krystal.addMark('stackoverflow', krystal, "http://stackoverflow.com/questions/7042340/node-js-error-cant-set-headers-after-they-are-sent");
+	krystal.addMark('cats', krystal, "https://www.google.com/search?q=cats&rlz=1C1CHFX_enUS568US568&oq=cats&aqs=chrome..69i57j0l5.4487j0j4&sourceid=chrome&ie=UTF-8");
+	milo.addFriend(krystal);
+	milo.addFriend(alex);
+	backend.getUser(krystal.name).getMark('stackoverflow').addCheck(krystal.name);
+	backend.getUser(krystal.name).getMark('stackoverflow').stealMark(milo.name);
+	
     authent('milo', 'pass', function (err, user) {
         if (user) {
             console.log('authenticate');
             req.session.regenerate(function () {
                 // Store username as session user
                 req.session.username = user.name;
-                req.session.success = 'Authenticated as ' + req.body.username;
                 +' click to <a href="/logout">logout</a>. '
                 + ' You may now access <a href="/restricted">/restricted</a>.';
                 res.redirect('/profile/' + user.name);
