@@ -69,13 +69,13 @@ exports.sorts.set("checks", function(a,b) {
 	return a.checks.length;
 });
 
-exports.sorts.set("clicks", function(a,b) {
-	return 0; //TODO
-});
+// exports.sorts.set("clicks", function(a,b) {
+// 	return 0; //TODO
+// });
 
-exports.sorts.set("tags", function(a,b) {
-	return 0; //TODO
-});
+// exports.sorts.set("tags", function(a,b) {
+// 	return 0; //TODO
+// });
 
 class User {
 
