@@ -67,7 +67,6 @@ app.post('/login', function (req, res) {
             req.session.regenerate(function () {
                 // Store username as session user
                 req.session.username = user.name;
-                req.session.success = 'Authenticated as ' + req.body.username;
                 +' click to <a href="/logout">logout</a>. '
                 + ' You may now access <a href="/restricted">/restricted</a>.';
                 res.redirect('/feed');
@@ -422,7 +421,6 @@ app.get('/init', function (req, res) {
             req.session.regenerate(function () {
                 // Store username as session user
                 req.session.username = user.name;
-                req.session.success = 'Authenticated as ' + req.body.username;
                 +' click to <a href="/logout">logout</a>. '
                 + ' You may now access <a href="/restricted">/restricted</a>.';
                 res.redirect('/profile/' + user.name);

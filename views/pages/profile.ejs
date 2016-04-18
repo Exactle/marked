@@ -11,7 +11,7 @@
 
 <!-- <div id="startText"> wow this is some text lol </div> -->
   <%-locals.message%>
-  
+
 	<p> <a href="/profile/">Go to profile!</a></p>
 	<p> <a href="/logout">Logout</a></p>
 	
@@ -21,7 +21,7 @@
     <p> Marks: <br> 
 
     <% for (mark of user.getMarks(sort)) { %>
-      <a href="<%= mark.url %>"> <%= mark.name %></a> <br>
+      <a href="<%= mark.url %>"> <%= mark.owner %></a> <br>
     <% } %>
     <!-- stuff here -->
     </p>
