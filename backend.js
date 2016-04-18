@@ -16,10 +16,6 @@ function getNewUid(thing) {
 	return uid;
 }
 
-exports.coolfunction = function () {
-    return "what";
-};
-
 exports.addUser = function (name, password) {
     if (users.get(name)) {
         //console.log("User already exists!");
