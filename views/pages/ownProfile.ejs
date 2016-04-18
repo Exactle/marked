@@ -31,7 +31,7 @@
     <p> Marks: <br> 
 
     <% for (mark of user.getMarks(sort)) { %>
-      <a href="<%= mark.url %>"> <%= mark.owner %></a> | test <br>
+      <a href="<%= mark.url %>"> <%= mark.name %></a> | <%=mark.owner.name%> <br>
     <% } %>
     <!-- stuff here -->
     </p>
