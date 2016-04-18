@@ -87,27 +87,32 @@ app.get('/signup', function (req, res) {
 });
 
 app.post('/signup', function (req, res) {
-    addUser(req.body.username, req.body.password);
-    console.log('user added');
-    console.log('thats another authent');
-    authent(req.body.username, req.body.password, function (err, user) {
-        if (user) {
-            console.log('authenticate');
-            req.session.regenerate(function () {
-                //Store session user as user/display username
-                req.session.username = user.name;
-                req.session.success = 'Authenticated as ' + req.body.username
-                    + ' click to <a href="/logout">logout</a>. '
-                    + ' You may now access <a href="/restricted">/restricted</a>.';
-                res.redirect('/profile/' + user.name);
-            });
-        } else {
-            console.log('Authentication failed');
-            req.session.error = 'Authentication failed, please check your '
-                + ' username and password.';
-            res.redirect('login');
-        }
-    });
+    if(!addUser(req.body.username, req.body.password)) {
+        console.log('Authentication failed');
+        req.session.error = 'User already exists.';
+        res.redirect('signup');
+    }
+    else {
+        console.log('user added');
+        console.log('thats another authent');
+        authent(req.body.username, req.body.password, function (err, user) {
+            if (user) {
+                console.log('authenticate');
+                req.session.regenerate(function () {
+                    //Store session user as user/display username
+                    req.session.username = user.name;
+                    req.session.success = 'Authenticated as ' + req.body.username
+                        + ' click to <a href="/logout">logout</a>. '
+                        + ' You may now access <a href="/restricted">/restricted</a>.';
+                    res.redirect('/profile/' + user.name);
+                });
+            } else {
+                console.log('Authentication failed');
+                req.session.error = 'Authentication failed, please check your '
+                    + ' username and password.';
+                res.redirect('login');
+            }
+    });}
 });
 
 /*////////////////////
@@ -161,10 +166,11 @@ function restrict(req, res, next) {
 function addUser(usr, pss) {
     if (backend.getUser(usr)) {
         console.log("USER ALREADY EXISTS");
+        return null;
     }
     else {
         console.log("123 " + pss);
-        backend.addUser(usr, pss);
+        return backend.addUser(usr, pss);
 
         // hash(pss, function(err, salt, hash){
         // if (err) throw err;
