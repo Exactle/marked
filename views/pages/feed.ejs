@@ -8,21 +8,18 @@
 </head>
 
 <body>
-	
+
 	<p> <a href="/profile/<%=user.name%>">Go to profile!</a></p>
 	<p> <a href="/logout">Logout</a></p>
-	
-    <p> User: <b> <%= user.name %> </b> </p>	
-	
-	
-    <p> Followed Marks: <br> 
+
+    <p> User: <b> <%= user.name %> </b> </p>
+    <p> Followed Marks: <br> <br>
 
 	<% for (friend of user.friends.values()) { %>
-		<% for (mark of friend.getMarks(sort)) { %>			
-			<a href= <%= mark.url %>> <%= mark.name %></a> <br>
-			
-			<span id="<%=mark.name%>"> Checks: <%= mark.checkCount%></span> <br>
-			<span id="<%=mark.uid%>"> Steal </span> <br> <br>
+		<% for (mark of friend.getMarks(sort)) { %>
+			<a href= <%= mark.url %>> <%= mark.name %></a> | 
+			<%=mark.owner.name%> | 
+			<span id="<%=mark.name%>"> <a href="javascript:void(0)"> Checks: <%= mark.checkCount%></a> </span> | <span id="<%=mark.uid%>"> <a href="javascript:void(0)"> Steal</a></span><br> <br>
 
 			<script>
 
@@ -44,14 +41,12 @@
 				xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 				xhttp.send('uid=<%=mark.uid%>');
 				event.target.innerHTML = "Checked";
-			
 			}
 
 			document.getElementById('<%=mark.uid%>').addEventListener("click", stealFunction, false);
 			document.getElementById('<%=mark.name%>').addEventListener("click", checkFunction, false);
 			</script>
 
-						
 		<% } %>
     <% } %>
 	
