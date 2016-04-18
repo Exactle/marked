@@ -235,7 +235,8 @@ class Mark {
         this.tags.set(tag, tag);
     }
 
-    addCheck(checkingUser) {
+    addCheck(checkingUserName) {
+		var checkingUser = users.get(checkingUserName);
 		if(this.checks.indexOf(checkingUser.uid) < 0)
 		{
 			this.checks.push(checkingUser.uid);

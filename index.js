@@ -268,9 +268,14 @@ app.post('/stealMark', function (req, res) {
     var markUid = req.body.uid;
     var username = req.session.username;
 
-    console.log('stealing, uid:' + markUid + ', username: ' + username + ' mark:' + backend.getMarkByUid(markUid));
-
     backend.getMarkByUid(markUid).stealMark(username);
+});
+
+app.post('/checkMark', function (req, res) {
+    var markUid = req.body.uid;
+    var username = req.session.username;
+
+	backend.getMarkByUid(markUid).checkMark(username);
 });
 
 app.get('/followUser', function(req, res) {
@@ -392,7 +397,7 @@ app.get('/init', function (req, res) {
 	krystal.addMark('cats', krystal, "https://www.google.com/search?q=cats&rlz=1C1CHFX_enUS568US568&oq=cats&aqs=chrome..69i57j0l5.4487j0j4&sourceid=chrome&ie=UTF-8");
 	milo.addFriend(krystal);
 	milo.addFriend(alex);
-	backend.getUser(krystal.name).getMark('stackoverflow').addCheck(krystal);
+	backend.getUser(krystal.name).getMark('stackoverflow').addCheck(krystal.name);
 	backend.getUser(krystal.name).getMark('stackoverflow').stealMark(milo.name);
 	
     authent('milo', 'pass', function (err, user) {
