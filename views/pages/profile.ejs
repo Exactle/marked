@@ -23,7 +23,7 @@
     <% for (mark of user.getMarks(sort)) { %>
       <a href= <%= mark.url %>> <%= mark.name %></a> | 
       <a href="/profile/<%=mark.owner.name%>"><%=mark.owner.name%></a> | 
-      <span id="<%=mark.name%>"> <a href="javascript:void(0)"> Checks: <%= mark.checkCount%></a> </span> | <span id="<%=mark.uid%>"> <a href="javascript:void(0)"> Steal</a></span><br>
+      <span id="<%=mark.name%>"> <a href="javascript:void(0)"> Checks: <%= mark.checkCount%></a> </span> | <span id="<%=mark.uid%>"> <a href="javascript:void(0)"> reMark</a></span><br>
 
       <script>
 
