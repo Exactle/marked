@@ -70,7 +70,7 @@ app.post('/login', function (req, res) {
                 req.session.success = 'Authenticated as ' + req.body.username;
                 +' click to <a href="/logout">logout</a>. '
                 + ' You may now access <a href="/restricted">/restricted</a>.';
-                res.redirect('/feed/' + user.name);
+                res.redirect('/feed');
             });
         } else {
             console.log('Authentication failed');
