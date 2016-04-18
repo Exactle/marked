@@ -17,8 +17,8 @@
 	<% for (friend of user.friends.values()) { %>
 		<% for (mark of friend.getMarks(sort)) { %>
 			<a href= <%= mark.url %>> <%= mark.name %></a> | 
-			<%=mark.owner.name%> | 
-			<span id="<%=mark.name%>"> <a href="javascript:void(0)"> Checks: <%= mark.checkCount%></a> </span> | <span id="<%=mark.uid%>"> <a href="javascript:void(0)"> Steal</a></span><br> <br>
+			<a href="/profile/<%=mark.owner.name%>"><%=mark.owner.name%></a> | 
+			<span id="<%=mark.name%>"> <a href="javascript:void(0)"> Checks: <%= mark.checkCount%></a> </span> | <span id="<%=mark.uid%>"> <a href="javascript:void(0)"> reMark </a></span><br>
 
 			<script>
 

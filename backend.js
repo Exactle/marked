@@ -62,7 +62,7 @@ exports.sorts.set("url", function(a,b) {
 });
 
 exports.sorts.set("checks", function(a,b) {
-	return a.checks.length;
+	return -a.checks.length; //negative to sort the other way
 });
 
 // exports.sorts.set("clicks", function(a,b) {
