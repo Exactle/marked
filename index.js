@@ -384,7 +384,7 @@ app.get('/init', function (req, res) {
 	milo.addFriend(krystal);
 	milo.addFriend(alex);
 	backend.getUser(krystal.name).getMark('stackoverflow').addCheck(krystal);
-	console.log(backend.getUser(krystal.name).getMark('stackoverflow').checkCount);
+	backend.getUser(krystal.name).getMark('stackoverflow').stealMark(milo);
 	
     authent('milo', 'pass', function (err, user) {
         if (user) {

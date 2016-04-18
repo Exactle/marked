@@ -237,6 +237,14 @@ class Mark {
 			this.checks.push(checkingUser.uid);
 			checkingUser.checks.push(this.uid);
 			this.checkCount++;
+			console.log(checkingUser.name + " checked " + this.name);
 		}		    	
     }
+	
+	stealMark(thief) {
+		if(!thief.marks.has(this.name)){
+			thief.marks.set(this.name, new Mark(this.name, thief, this.url, this.privacy));
+			console.log(thief.name + " has stolen " + this.name);
+		}
+	}
 }

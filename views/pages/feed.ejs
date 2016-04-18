@@ -22,18 +22,34 @@
 
 	<% for (friend of user.friends.values()) { %>
 		<% for (mark of friend.getMarks(sort)) { %>			
-			<a href= <%= mark.url %>> <%= mark.name %></a>	
-			<span id= <%=mark.uid%>> Checks: <%= mark.checkCount%></span> <br>
+			<a href= <%= mark.url %>> <%= mark.name %></a> <br>
+			
+			<span id= <%=mark.name%>> Checks: <%= mark.checkCount%></span> <br>
+			<span id= <%=mark.uid%>> Steal </span> <br> <br>
+
+			<script>
+			document.getElementById(<%=mark.uid%>).addEventListener("click", stealFunction, false);
+			document.getElementById(<%=mark.name%>).addEventListener("click", checkFunction, false);
 				
-			<script>								
-									
-				document.getElementById(<%=mark.uid%>).addEventListener("click", function( event ) {
-					<%= mark.addCheck(user); %>
-					event.target.innerHTML = "Checks: " + <%= mark.checkCount %>;
-				}, false);
-						
-							
+			function stealFunction()
+			{
+				<% if(user.marks.has(mark.name)) { %>
+					event.target.innerHTML = "You already own this Mark";
+				<% } else { %>
+					<% mark.stealMark(user); %>
+					event.target.innerHTML = " Stolen";
+				<% } %>
+				
+			}
+			
+			function checkFunction()
+			{
+				<%= mark.addCheck(user); %>
+				event.target.innerHTML = "Checks: " + <%= mark.checkCount %>;
+			
+			}
 			</script>
+
 						
 		<% } %>
     <% } %>
