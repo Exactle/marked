@@ -288,7 +288,7 @@ app.post('/stealMark', function (req, res) {
     var username = req.session.username;
 	
 	if(!backend.getMarkByUid(markUid).stealMark(username)) {
-		res.send("Mark already stolen!");
+		res.send("Mark already reMarked!");
 	}
 	else{
 		res.send("reMarked!");
